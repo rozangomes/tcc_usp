@@ -505,6 +505,39 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Partido do governador
+
+### D39. Governador como controle
+- **Fonte:** TSE, linhas de governador dos arquivos
+  `votacao_candidato_munzona_{ANO}.zip` (1994–2022). Script
+  `src/13_governador.py` gera `data/processed/governador_uf` (uma linha por
+  ano × UF).
+- **Regra do eleito:** eleição ordinária; o candidato ELEITO no último turno
+  da UF. Cassações e eleições suplementares para governador não são
+  tratadas (vale o eleito nas urnas, como para presidente). Conferido: 27
+  UFs com um eleito em cada ano; contagens por partido batem com os
+  resultados conhecidos (ex.: 2018, PT 4, PSL 3, NOVO 1).
+- **Pareamento:**
+  - Painel A: governador eleito em *t − 2* (governa durante a eleição do
+    prefeito em *t* e a do presidente em *t + 2*). Colunas
+    `candidato_partido_governador` e `prefeito_partido_governador`.
+  - Painel B: governador eleito em *t* (governa durante a eleição municipal
+    de *t + 2*). Coluna `partido_do_governador`.
+  - O partido do governador é levado ao ano de comparação pelas fusões.
+- **Modelos:**
+  - A4 = A3 + `prefeito_partido_governador` + `mesmo_partido ×
+    candidato_partido_governador`. O partido do candidato é fixo dentro de
+    candidato × UF, então só pode entrar em interação.
+  - B4 = B3 + `partido_do_governador`.
+- **Resultado inicial:** no B4, ser o partido do governador está associado a
+  +8,3 pontos no voto para prefeito e +9,4 p.p. na chance de eleger o
+  prefeito, bem mais que ser o partido do presidente (+2,6 pontos; +3,8
+  p.p.), que continua significativo. No A4, a diferença associada ao
+  prefeito do mesmo partido é de +0,69 ponto e é menor (−0,58) quando o
+  governador também é do partido do candidato. Associação, não causalidade.
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

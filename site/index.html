@@ -147,7 +147,7 @@
     </section>
     <section class="card" id="regressoes">
       <h2>Regressões simples</h2>
-      <p class="sub">Mínimos quadrados ordinários, erros-padrão agrupados por município. A: efeito fixo de candidato × UF. B: efeito fixo de partido × UF e de ano. Os modelos 2 incluem o % do partido na eleição anterior do mesmo cargo; os modelos 3, o % do partido nas eleições para deputado federal e vereador. Coeficientes em pontos percentuais (em "elegeu o prefeito", em proporção).</p>
+      <p class="sub">Mínimos quadrados ordinários, erros-padrão agrupados por município. A: efeito fixo de candidato × UF. B: efeito fixo de partido × UF e de ano. Os modelos 2 incluem o % do partido na eleição anterior do mesmo cargo; os modelos 3, o % do partido nas eleições para deputado federal e vereador; os modelos 4 acrescentam o partido do governador. Coeficientes em pontos percentuais (em "elegeu o prefeito", em proporção).</p>
       <div class="rolagem"><table>
         <thead><tr><th>Modelo</th><th>Resposta</th><th>Termo</th><th class="n">Coef.</th><th class="n">IC 95%</th><th class="n">p</th><th class="n">N</th></tr></thead>
         <tbody id="tabReg"></tbody>
@@ -318,6 +318,9 @@
     pct_dep_federal_anterior: '% do partido p/ dep. federal (eleição anterior)',
     pct_dep_federal_mesmo_ano: '% do partido p/ dep. federal (mesma eleição)',
     pct_vereador_anterior: '% do partido p/ vereador (municipal anterior)',
+    prefeito_partido_governador: 'Prefeito do partido do governador',
+    mesmo_x_governador: '… × candidato do partido do governador',
+    partido_do_governador: 'Partido do governador',
   };
   const respostas = {pct_votos_presidente: '% para presidente', pct_prefeito_1t: '% para prefeito', elegeu_prefeito: 'Elegeu o prefeito'};
 

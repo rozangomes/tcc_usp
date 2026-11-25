@@ -145,6 +145,9 @@ eleições × candidato a presidente** (1º turno). Pares: 1996→1998, …,
 | `pct_presidente_eleicao_anterior` | % do mesmo partido no 1º turno para presidente em *t − 2* (D27; vazio se o partido não disputou) |
 | `pct_dep_federal_anterior` | % do mesmo partido para deputado federal em *t − 2* (D38) |
 | `pct_vereador_mesmo_ano` | % do partido do candidato para vereador em *t*, a mesma eleição do prefeito (D38; não usado nos modelos) |
+| `partido_governador` | Partido do governador eleito em *t − 2* na UF, levado a *t + 2* (D39) |
+| `candidato_partido_governador` | 1 = o candidato a presidente é do partido do governador |
+| `prefeito_partido_governador` | 1 = o prefeito é do partido do governador |
 
 ## `data/processed/painel_presidente_prefeito` (.parquet / .csv)
 **Painel B, presidente → prefeito.** Uma linha por **município × eleição
@@ -166,6 +169,8 @@ anterior (D28).
 | `pct_prefeito_eleicao_anterior` | % do partido no 1º turno para prefeito em *t − 2*, com fusões aplicadas (D27; vazio em 1996) |
 | `pct_dep_federal_mesmo_ano` | % do partido para deputado federal em *t*, a mesma eleição do presidente (D38) |
 | `pct_vereador_anterior` | % do partido para vereador na eleição municipal anterior (D38; vazio em 1996) |
+| `partido_governador` | Partido do governador eleito em *t* na UF, levado a *t + 2* (D39) |
+| `partido_do_governador` | 1 = o partido é o do governador |
 
 ## `data/processed/proporcional_municipio_partido` (.parquet / .csv)
 Uma linha por **ano × cargo × município × partido** nas eleições
@@ -182,6 +187,16 @@ proporcionais (D36, D37).
 | `votos` | `votos_nominais + votos_legenda` |
 | `votos_validos_mun` | Soma dos votos de todos os partidos para o cargo no município |
 | `pct_votos` | `votos ÷ votos_validos_mun × 100` |
+
+## `data/processed/governador_uf` (.parquet / .csv)
+Uma linha por **ano × UF** (eleições gerais 1994–2022; D39).
+
+| Coluna | Significado |
+|---|---|
+| `ano`, `sg_uf` | Eleição e UF |
+| `partido_governador` | Sigla do partido do governador eleito, como no TSE |
+| `governador_eleito` | Nome de urna |
+| `turno_decisao` | Turno em que foi eleito (1 ou 2) |
 
 ---
 

@@ -47,6 +47,7 @@ data/processed/presidente_municipio_candidato.parquet   (script 02)
 data/processed/prefeito_municipio_candidato.parquet     (script 05)
 data/processed/prefeito_municipio.parquet               (script 05)
 data/processed/proporcional_municipio_partido.parquet   (script 12; D38)
+data/processed/governador_uf.parquet                    (script 13; D39)
 data/manual/partidos_*.csv                              (via partidos.py)
 
 SAÍDAS
@@ -147,6 +148,15 @@ def juntar_proporcional(d: pd.DataFrame, prop: pd.DataFrame, ano: int, cargo: st
     return d
 
 
+def governador_por_uf(gov: pd.DataFrame, ano: int, ano_destino: int) -> pd.DataFrame:
+    """Partido do governador eleito em `ano`, por UF, como linhagem levada a
+    `ano_destino` pelas fusões (D39). Devolve colunas sg_uf, partido_governador."""
+    g = gov[gov["ano"] == ano].copy()
+    g["lin"] = [linhagem(s, ano) for s in g["sg_partido_gov"]]
+    g = levar_para(g, "lin", ano, ano_destino, "partido_governador")
+    return g[["sg_uf", "partido_governador"]]
+
+
 def partido_presidente_eleito(pres: pd.DataFrame, ano: int) -> tuple[str, str]:
     """Partido e nome do presidente eleito: mais votado no Brasil no último
     turno daquele ano (2º turno, se houve)."""
@@ -167,7 +177,7 @@ def salvar(df: pd.DataFrame, nome: str):
 # ---------------------------------------------------------------------------
 # Painel A — prefeito t -> presidente t+2
 # ---------------------------------------------------------------------------
-def painel_a(pres, res, prop) -> pd.DataFrame:
+def painel_a(pres, res, prop, gov) -> pd.DataFrame:
     partes = []
     for t, t2 in PARES_A:
         # Prefeito eleito em t, com o partido levado a t+2
@@ -207,6 +217,12 @@ def painel_a(pres, res, prop) -> pd.DataFrame:
         d = juntar_proporcional(d, prop, t, "vereador", t2,
                                 "partido_presidente", "pct_vereador_mesmo_ano")
 
+        # Governador (D39): o eleito em t-2 governa durante a eleição do
+        # prefeito (t) e a do presidente (t+2)
+        d = d.merge(governador_por_uf(gov, t - 2, t2), on="sg_uf", how="left")
+        d["candidato_partido_governador"] = (d["partido_presidente"] == d["partido_governador"]).astype(int)
+        d["prefeito_partido_governador"] = (d["partido_prefeito"] == d["partido_governador"]).astype(int)
+
         d["mesmo_partido"] = (d["partido_presidente"] == d["partido_prefeito"]).astype(int)
         # O partido do prefeito teve candidato a presidente em t+2?
         com_cand = d.groupby("cd_municipio_tse")["mesmo_partido"].transform("max")
@@ -229,13 +245,14 @@ def painel_a(pres, res, prop) -> pd.DataFrame:
         "nr_candidato", "candidato_presidente", "sg_partido_presidente",
         "partido_presidente", "mesmo_partido", "partido_prefeito_tem_candidato",
         "pct_votos_presidente", "pct_presidente_eleicao_anterior",
-        "pct_dep_federal_anterior", "pct_vereador_mesmo_ano"]]
+        "pct_dep_federal_anterior", "pct_vereador_mesmo_ano",
+        "partido_governador", "candidato_partido_governador", "prefeito_partido_governador"]]
 
 
 # ---------------------------------------------------------------------------
 # Painel B — presidente t -> prefeito t+2
 # ---------------------------------------------------------------------------
-def painel_b(pres, pref, res, prop) -> pd.DataFrame:
+def painel_b(pres, pref, res, prop, gov) -> pd.DataFrame:
     partes = []
     for t, t2 in PARES_B:
         sigla_pres, nome_pres = partido_presidente_eleito(pres, t)
@@ -279,6 +296,10 @@ def painel_b(pres, pref, res, prop) -> pd.DataFrame:
         d = juntar_proporcional(d, prop, t2 - 4, "vereador", t2,
                                 "lin_dest", "pct_vereador_anterior")
 
+        # Governador (D39): o eleito em t governa durante a eleição municipal t+2
+        d = d.merge(governador_por_uf(gov, t, t2), on="sg_uf", how="left")
+        d["partido_do_governador"] = (d["lin_dest"] == d["partido_governador"]).astype(int)
+
         d["partido_do_presidente"] = (d["lin_dest"] == lin_pres).astype(int)
         d.insert(0, "presidente_eleito", nome_pres)
         d.insert(0, "partido_presidente_eleito", lin_pres)
@@ -297,7 +318,7 @@ def painel_b(pres, pref, res, prop) -> pd.DataFrame:
         "partido", "partido_do_presidente", "teve_candidato",
         "n_candidatos_partido", "pct_prefeito_1t", "elegeu_prefeito",
         "pct_prefeito_eleicao_anterior", "pct_dep_federal_mesmo_ano",
-        "pct_vereador_anterior"]]
+        "pct_vereador_anterior", "partido_governador", "partido_do_governador"]]
 
 
 # ---------------------------------------------------------------------------
@@ -330,11 +351,13 @@ def main():
     prop = pd.read_parquet(PASTA / "proporcional_municipio_partido.parquet",
                            columns=["ano", "cargo", "cd_municipio_tse", "sg_partido", "pct_votos"])
     prop = adicionar_linhagem(prop, "sg_partido", "ano", "linhagem")
+    gov = pd.read_parquet(PASTA / "governador_uf.parquet").rename(
+        columns={"partido_governador": "sg_partido_gov"})  # script 13
 
     print("\nPainel A — prefeito t -> presidente t+2")
-    a = painel_a(pres, res, prop)
+    a = painel_a(pres, res, prop, gov)
     print("\nPainel B — presidente t -> prefeito t+2")
-    b = painel_b(pres, pref, res, prop)
+    b = painel_b(pres, pref, res, prop, gov)
 
     print()
     conferir(a, b)
