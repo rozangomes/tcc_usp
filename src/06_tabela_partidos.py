@@ -55,6 +55,10 @@ def siglas_observadas() -> pd.DataFrame:
     pref = pd.read_parquet(PASTA / "prefeito_municipio_candidato.parquet",
                            columns=["ano", "sg_partido"])
     partes.append(pref.assign(origem="prefeito (ordinária)"))
+    prop_arq = PASTA / "proporcional_municipio_partido.parquet"  # script 12
+    if prop_arq.exists():
+        prop = pd.read_parquet(prop_arq, columns=["ano", "sg_partido"])
+        partes.append(prop.assign(origem="proporcional"))
     res = pd.read_parquet(PASTA / "prefeito_municipio.parquet")
     for col in ["partido_eleito", "partido_eleito_ultima_suplementar"]:
         partes.append(res[["ano", col]].rename(columns={col: "sg_partido"})
@@ -77,7 +81,7 @@ def main():
     print("ok: todas as siglas dos dados estão na tabela de equivalência")
 
     # 2. Partido absorvido não aparece em eleição ordinária depois do fim
-    ordinaria = obs[obs["origem"].str.contains("presidente|ordinária")]
+    ordinaria = obs[obs["origem"].str.contains("presidente|ordinária|proporcional")]
     problemas = []
     for _, ev in eventos.iterrows():
         depois = ordinaria[(ordinaria["linhagem"] == ev["linhagem_origem"])

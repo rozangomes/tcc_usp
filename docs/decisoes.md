@@ -474,6 +474,37 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+### D38. Voto proporcional como controle da força do partido
+- **Painel A (prefeito → presidente):** duas colunas novas, com o partido
+  levado a *t + 2* pelas fusões:
+  - `pct_dep_federal_anterior`: % do partido para deputado federal na
+    eleição geral anterior ao prefeito (*t − 2*, a mesma do
+    `pct_presidente_eleicao_anterior`). Mede a força do partido **antes**
+    de o prefeito ser eleito.
+  - `pct_vereador_mesmo_ano`: % do partido para vereador na mesma eleição
+    do prefeito (*t*). Fica no painel, mas **não entra nos modelos**:
+    vem da mesma eleição do prefeito e pode refletir o próprio prefeito.
+- **Painel B (presidente → prefeito):**
+  - `pct_dep_federal_mesmo_ano`: % do partido para deputado federal na
+    mesma eleição geral do presidente (*t*).
+  - `pct_vereador_anterior`: % do partido para vereador na eleição
+    municipal anterior (*t + 2 − 4*; vazio em 1996).
+- **Regra dos vazios:** igual à D27 (0% se o partido disputou aquela
+  eleição mas não teve votos no município; vazio se não disputou).
+- **Novos modelos:** A3 = A1 + `pct_dep_federal_anterior`; B3 = B1 +
+  `pct_dep_federal_mesmo_ano` + `pct_vereador_anterior`.
+- **Resultado inicial:** com o controle, a diferença associada a ter o
+  prefeito do partido cai de 1,2 para 0,45 ponto (A3, ainda
+  significativa), e a do partido do presidente cai de 4,7 para 2,3 pontos
+  no voto para prefeito (B3). Associação, não causalidade.
+- **Tabela de partidos:** entraram as grafias usadas só nos arquivos por
+  partido ("PC DO B" e "PT DO B" em 1994, "PCDOB" em 2026) e os partidos
+  pequenos de 1994 (PTRB, PBDDM, PDC, PJP, PPDB, PTR). O script 06 agora
+  confere também o banco proporcional. Alguns nomes de 1994 estão marcados
+  "(nome a confirmar)".
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

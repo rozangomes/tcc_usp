@@ -143,6 +143,8 @@ eleições × candidato a presidente** (1º turno). Pares: 1996→1998, …,
 | `partido_prefeito_tem_candidato` | 1 = o partido do prefeito teve candidato a presidente em *t + 2* |
 | `pct_votos_presidente` | % de votos válidos do candidato no município (1º turno) |
 | `pct_presidente_eleicao_anterior` | % do mesmo partido no 1º turno para presidente em *t − 2* (D27; vazio se o partido não disputou) |
+| `pct_dep_federal_anterior` | % do mesmo partido para deputado federal em *t − 2* (D38) |
+| `pct_vereador_mesmo_ano` | % do partido do candidato para vereador em *t*, a mesma eleição do prefeito (D38; não usado nos modelos) |
 
 ## `data/processed/painel_presidente_prefeito` (.parquet / .csv)
 **Painel B, presidente → prefeito.** Uma linha por **município × eleição
@@ -162,6 +164,8 @@ anterior (D28).
 | `pct_prefeito_1t` | % de votos válidos do partido no 1º turno para prefeito (0 se não teve candidato) |
 | `elegeu_prefeito` | 1 = o partido elegeu o prefeito (regra da D21); vazio se não há eleito identificado |
 | `pct_prefeito_eleicao_anterior` | % do partido no 1º turno para prefeito em *t − 2*, com fusões aplicadas (D27; vazio em 1996) |
+| `pct_dep_federal_mesmo_ano` | % do partido para deputado federal em *t*, a mesma eleição do presidente (D38) |
+| `pct_vereador_anterior` | % do partido para vereador na eleição municipal anterior (D38; vazio em 1996) |
 
 ## `data/processed/proporcional_municipio_partido` (.parquet / .csv)
 Uma linha por **ano × cargo × município × partido** nas eleições

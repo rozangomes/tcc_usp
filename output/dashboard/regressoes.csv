@@ -6,6 +6,10 @@ A2,pct_votos_presidente,mesmo_partido,-0.02,0.1228,0.8706,-0.2606,0.2206,88645
 A2,pct_votos_presidente,mesmo_x_capital,-1.1508,1.4666,0.4326,-4.0252,1.7236,88645
 A2,pct_votos_presidente,mesmo_x_recente,1.3811,0.1884,0.0,1.0119,1.7504,88645
 A2,pct_votos_presidente,pct_presidente_eleicao_anterior,0.5446,0.0055,0.0,0.5339,0.5554,88645
+A3,pct_votos_presidente,mesmo_partido,0.4506,0.1381,0.0011,0.18,0.7212,125830
+A3,pct_votos_presidente,mesmo_x_capital,-2.1176,1.8329,0.2479,-5.7099,1.4747,125830
+A3,pct_votos_presidente,mesmo_x_recente,0.814,0.3249,0.0122,0.1771,1.4509,125830
+A3,pct_votos_presidente,pct_dep_federal_anterior,0.1295,0.0045,0.0,0.1208,0.1383,125830
 B1,pct_prefeito_1t,partido_do_presidente,4.6517,0.2752,0.0,4.1123,5.191,188234
 B1,pct_prefeito_1t,pres_x_capital,4.3651,1.5536,0.005,1.3201,7.4101,188234
 B1,pct_prefeito_1t,pres_x_recente,-0.584,0.5292,0.2698,-1.6212,0.4533,188234
@@ -13,6 +17,11 @@ B2,pct_prefeito_1t,partido_do_presidente,4.0255,0.3038,0.0,3.4301,4.6209,172456
 B2,pct_prefeito_1t,pres_x_capital,5.4069,1.6492,0.001,2.1744,8.6393,172456
 B2,pct_prefeito_1t,pres_x_recente,-1.6755,0.5379,0.0018,-2.7298,-0.6212,172456
 B2,pct_prefeito_1t,pct_prefeito_eleicao_anterior,-0.0946,0.0038,0.0,-0.1021,-0.0871,172456
+B3,pct_prefeito_1t,partido_do_presidente,2.2826,0.3013,0.0,1.6921,2.8731,168017
+B3,pct_prefeito_1t,pres_x_capital,3.6596,1.4536,0.0118,0.8107,6.5085,168017
+B3,pct_prefeito_1t,pres_x_recente,-1.2207,0.504,0.0154,-2.2084,-0.2329,168017
+B3,pct_prefeito_1t,pct_dep_federal_mesmo_ano,0.3502,0.0059,0.0,0.3388,0.3617,168017
+B3,pct_prefeito_1t,pct_vereador_anterior,0.012,0.0069,0.0828,-0.0016,0.0255,168017
 B1,elegeu_prefeito,partido_do_presidente,0.0672,0.0054,0.0,0.0567,0.0777,188142
 B1,elegeu_prefeito,pres_x_capital,0.0288,0.0341,0.3987,-0.0381,0.0957,188142
 B1,elegeu_prefeito,pres_x_recente,-0.0396,0.0086,0.0,-0.0564,-0.0227,188142
@@ -20,3 +29,8 @@ B2,elegeu_prefeito,partido_do_presidente,0.0563,0.0056,0.0,0.0454,0.0673,172366
 B2,elegeu_prefeito,pres_x_capital,0.0394,0.0342,0.2487,-0.0276,0.1064,172366
 B2,elegeu_prefeito,pres_x_recente,-0.044,0.0086,0.0,-0.0608,-0.0271,172366
 B2,elegeu_prefeito,pct_prefeito_eleicao_anterior,0.0,0.0001,0.7455,-0.0001,0.0001,172366
+B3,elegeu_prefeito,partido_do_presidente,0.0343,0.0056,0.0,0.0234,0.0453,167928
+B3,elegeu_prefeito,pres_x_capital,0.0243,0.0343,0.479,-0.043,0.0916,167928
+B3,elegeu_prefeito,pres_x_recente,-0.0431,0.0083,0.0,-0.0595,-0.0268,167928
+B3,elegeu_prefeito,pct_dep_federal_mesmo_ano,0.0046,0.0001,0.0,0.0044,0.0048,167928
+B3,elegeu_prefeito,pct_vereador_anterior,0.001,0.0001,0.0,0.0008,0.0013,167928

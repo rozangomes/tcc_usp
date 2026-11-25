@@ -31,13 +31,16 @@ causalidade.
    - Modelo A: % do candidato a presidente ~ mesmo_partido, com interação
      com capital e com os ciclos recentes, comparando cada candidato com ele
      mesmo dentro de cada UF (efeito fixo candidato × UF). O modelo A2
-     acrescenta o % do partido na eleição presidencial anterior.
+     acrescenta o % do partido na eleição presidencial anterior; o A3, o %
+     do partido para deputado federal na eleição geral anterior (D38).
    - Modelo B: % do partido para prefeito (e "elegeu o prefeito") ~
      partido_do_presidente, com interações com capital e ciclo recente,
      comparando cada partido com ele mesmo dentro de cada UF (efeito fixo
      partido × UF) e com efeito fixo de ano. O modelo B2 acrescenta o % do
-     partido na eleição municipal anterior.
-   Ver D29-D31 em docs/decisoes.md.
+     partido na eleição municipal anterior; o B3, o % do partido para
+     deputado federal na mesma eleição do presidente e para vereador na
+     eleição municipal anterior (D38).
+   Ver D29-D31 e D38 em docs/decisoes.md.
 
 COMO RODAR
 ----------
@@ -268,7 +271,8 @@ def regressoes(a_sel, b):
     a["mesmo_x_recente"] = a["mesmo_partido"] * a["ano_presidente"].isin(RECENTES_PRES).astype(int)
     a["grupo"] = a["ano_presidente"].astype(str) + a["candidato_presidente"] + a["sg_uf"]
     xs = ["mesmo_partido", "mesmo_x_capital", "mesmo_x_recente", "capital"]
-    for nome, extra in [("A1", []), ("A2", ["pct_presidente_eleicao_anterior"])]:
+    for nome, extra in [("A1", []), ("A2", ["pct_presidente_eleicao_anterior"]),
+                        ("A3", ["pct_dep_federal_anterior"])]:
         r, n = mqo_com_efeito_fixo(a, "pct_votos_presidente", xs + extra, "grupo",
                                    "cd_municipio_tse")
         saida.append(tabela_coef(r, n, nome, "pct_votos_presidente"))
@@ -282,7 +286,8 @@ def regressoes(a_sel, b):
     b["grupo"] = b["partido"] + b["sg_uf"]
     xs = ["partido_do_presidente", "pres_x_capital", "pres_x_recente", "capital"]
     for y in ["pct_prefeito_1t", "elegeu_prefeito"]:
-        for nome, extra in [("B1", []), ("B2", ["pct_prefeito_eleicao_anterior"])]:
+        for nome, extra in [("B1", []), ("B2", ["pct_prefeito_eleicao_anterior"]),
+                            ("B3", ["pct_dep_federal_mesmo_ano", "pct_vereador_anterior"])]:
             r, n = mqo_com_efeito_fixo(b, y, xs + extra, "grupo", "cd_municipio_tse",
                                        col_ano="ano_municipal")
             saida.append(tabela_coef(r, n, nome, y))

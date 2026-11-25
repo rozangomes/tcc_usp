@@ -5,7 +5,7 @@ Dep. Variable:     pct_votos_presidente   R-squared (uncentered):               
 Model:                              OLS   Adj. R-squared (uncentered):              0.002
 Method:                   Least Squares   F-statistic:                              145.7
 Date:                  Wed, 25 Nov 2026   Prob (F-statistic):                   1.08e-118
-Time:                          13:31:15   Log-Likelihood:                     -4.6000e+05
+Time:                          14:35:47   Log-Likelihood:                     -4.6000e+05
 No. Observations:                127418   AIC:                                  9.200e+05
 Df Residuals:                    127414   BIC:                                  9.200e+05
 Df Model:                             4                                                  
@@ -35,7 +35,7 @@ Dep. Variable:     pct_votos_presidente   R-squared (uncentered):               
 Model:                              OLS   Adj. R-squared (uncentered):              0.379
 Method:                   Least Squares   F-statistic:                              2156.
 Date:                  Wed, 25 Nov 2026   Prob (F-statistic):                        0.00
-Time:                          13:31:16   Log-Likelihood:                     -3.0638e+05
+Time:                          14:35:48   Log-Likelihood:                     -3.0638e+05
 No. Observations:                 88645   AIC:                                  6.128e+05
 Df Residuals:                     88640   BIC:                                  6.128e+05
 Df Model:                             5                                                  
@@ -59,6 +59,37 @@ Notes:
 [1] R² is computed without centering (uncentered) since the model does not contain a constant.
 [2] Standard Errors are robust to cluster correlation (CRV1)
 
+===== Modelo A3 (efeito fixo candidato × UF) =====
+                                  OLS Regression Results                                 
+=========================================================================================
+Dep. Variable:     pct_votos_presidente   R-squared (uncentered):                   0.020
+Model:                              OLS   Adj. R-squared (uncentered):              0.019
+Method:                   Least Squares   F-statistic:                              216.2
+Date:                  Wed, 25 Nov 2026   Prob (F-statistic):                   2.40e-211
+Time:                          14:35:48   Log-Likelihood:                     -4.5271e+05
+No. Observations:                125830   AIC:                                  9.054e+05
+Df Residuals:                    125825   BIC:                                  9.055e+05
+Df Model:                             5                                                  
+Covariance Type:                cluster                                                  
+============================================================================================
+                               coef    std err          z      P>|z|      [0.025      0.975]
+--------------------------------------------------------------------------------------------
+mesmo_partido                0.4506      0.138      3.264      0.001       0.180       0.721
+mesmo_x_capital             -2.1176      1.833     -1.155      0.248      -5.710       1.475
+mesmo_x_recente              0.8140      0.325      2.505      0.012       0.177       1.451
+capital                     -0.9432      0.263     -3.583      0.000      -1.459      -0.427
+pct_dep_federal_anterior     0.1295      0.004     29.077      0.000       0.121       0.138
+==============================================================================
+Omnibus:                     3729.341   Durbin-Watson:                   2.947
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             8310.010
+Skew:                           0.165   Prob(JB):                         0.00
+Kurtosis:                       4.215   Cond. No.                         418.
+==============================================================================
+
+Notes:
+[1] R² is computed without centering (uncentered) since the model does not contain a constant.
+[2] Standard Errors are robust to cluster correlation (CRV1)
+
 ===== Modelo B1, resposta = pct_prefeito_1t (efeito fixo partido × UF + ano) =====
                                  OLS Regression Results                                
 =======================================================================================
@@ -66,7 +97,7 @@ Dep. Variable:        pct_prefeito_1t   R-squared (uncentered):                 
 Model:                            OLS   Adj. R-squared (uncentered):              0.020
 Method:                 Least Squares   F-statistic:                              774.6
 Date:                Wed, 25 Nov 2026   Prob (F-statistic):                        0.00
-Time:                        13:31:16   Log-Likelihood:                     -8.5653e+05
+Time:                        14:35:48   Log-Likelihood:                     -8.5653e+05
 No. Observations:              188234   AIC:                                  1.713e+06
 Df Residuals:                  188223   BIC:                                  1.713e+06
 Df Model:                          11                                                  
@@ -103,7 +134,7 @@ Dep. Variable:        pct_prefeito_1t   R-squared (uncentered):                 
 Model:                            OLS   Adj. R-squared (uncentered):              0.012
 Method:                 Least Squares   F-statistic:                              157.0
 Date:                Wed, 25 Nov 2026   Prob (F-statistic):                        0.00
-Time:                        13:31:17   Log-Likelihood:                     -7.8631e+05
+Time:                        14:35:49   Log-Likelihood:                     -7.8631e+05
 No. Observations:              172456   AIC:                                  1.573e+06
 Df Residuals:                  172445   BIC:                                  1.573e+06
 Df Model:                          11                                                  
@@ -133,6 +164,44 @@ Notes:
 [1] R² is computed without centering (uncentered) since the model does not contain a constant.
 [2] Standard Errors are robust to cluster correlation (CRV1)
 
+===== Modelo B3, resposta = pct_prefeito_1t (efeito fixo partido × UF + ano) =====
+                                 OLS Regression Results                                
+=======================================================================================
+Dep. Variable:        pct_prefeito_1t   R-squared (uncentered):                   0.039
+Model:                            OLS   Adj. R-squared (uncentered):              0.039
+Method:                 Least Squares   F-statistic:                              412.8
+Date:                Wed, 25 Nov 2026   Prob (F-statistic):                        0.00
+Time:                        14:35:50   Log-Likelihood:                     -7.6386e+05
+No. Observations:              168017   AIC:                                  1.528e+06
+Df Residuals:                  168005   BIC:                                  1.528e+06
+Df Model:                          12                                                  
+Covariance Type:              cluster                                                  
+=============================================================================================
+                                coef    std err          z      P>|z|      [0.025      0.975]
+---------------------------------------------------------------------------------------------
+partido_do_presidente         2.2826      0.301      7.576      0.000       1.692       2.873
+pres_x_capital                3.6596      1.454      2.518      0.012       0.811       6.509
+pres_x_recente               -1.2207      0.504     -2.422      0.015      -2.208      -0.233
+capital                      -6.0298      0.393    -15.327      0.000      -6.801      -5.259
+pct_dep_federal_mesmo_ano     0.3502      0.006     59.784      0.000       0.339       0.362
+pct_vereador_anterior         0.0120      0.007      1.735      0.083      -0.002       0.026
+ano_2004                      0.1549      0.115      1.346      0.178      -0.071       0.380
+ano_2008                      0.7408      0.134      5.549      0.000       0.479       1.003
+ano_2012                      0.5099      0.146      3.483      0.000       0.223       0.797
+ano_2016                      0.4591      0.147      3.126      0.002       0.171       0.747
+ano_2020                     -0.5935      0.154     -3.853      0.000      -0.895      -0.292
+ano_2024                     -1.2563      0.183     -6.858      0.000      -1.615      -0.897
+==============================================================================
+Omnibus:                     7632.688   Durbin-Watson:                   2.329
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             8564.284
+Skew:                           0.544   Prob(JB):                         0.00
+Kurtosis:                       2.800   Cond. No.                         477.
+==============================================================================
+
+Notes:
+[1] R² is computed without centering (uncentered) since the model does not contain a constant.
+[2] Standard Errors are robust to cluster correlation (CRV1)
+
 ===== Modelo B1, resposta = elegeu_prefeito (efeito fixo partido × UF + ano) =====
                                  OLS Regression Results                                
 =======================================================================================
@@ -140,7 +209,7 @@ Dep. Variable:        elegeu_prefeito   R-squared (uncentered):                 
 Model:                            OLS   Adj. R-squared (uncentered):              0.006
 Method:                 Least Squares   F-statistic:                              660.4
 Date:                Wed, 25 Nov 2026   Prob (F-statistic):                        0.00
-Time:                        13:31:18   Log-Likelihood:                         -99081.
+Time:                        14:35:50   Log-Likelihood:                         -99081.
 No. Observations:              188142   AIC:                                  1.982e+05
 Df Residuals:                  188131   BIC:                                  1.983e+05
 Df Model:                          11                                                  
@@ -177,7 +246,7 @@ Dep. Variable:        elegeu_prefeito   R-squared (uncentered):                 
 Model:                            OLS   Adj. R-squared (uncentered):              0.002
 Method:                 Least Squares   F-statistic:                              76.06
 Date:                Wed, 25 Nov 2026   Prob (F-statistic):                   3.64e-160
-Time:                        13:31:18   Log-Likelihood:                         -88465.
+Time:                        14:35:50   Log-Likelihood:                         -88465.
 No. Observations:              172366   AIC:                                  1.770e+05
 Df Residuals:                  172355   BIC:                                  1.771e+05
 Df Model:                          11                                                  
@@ -201,6 +270,44 @@ Omnibus:                    26792.605   Durbin-Watson:                   2.447
 Prob(Omnibus):                  0.000   Jarque-Bera (JB):            40560.049
 Skew:                           1.179   Prob(JB):                         0.00
 Kurtosis:                       2.704   Cond. No.                         799.
+==============================================================================
+
+Notes:
+[1] R² is computed without centering (uncentered) since the model does not contain a constant.
+[2] Standard Errors are robust to cluster correlation (CRV1)
+
+===== Modelo B3, resposta = elegeu_prefeito (efeito fixo partido × UF + ano) =====
+                                 OLS Regression Results                                
+=======================================================================================
+Dep. Variable:        elegeu_prefeito   R-squared (uncentered):                   0.025
+Model:                            OLS   Adj. R-squared (uncentered):              0.025
+Method:                 Least Squares   F-statistic:                              257.8
+Date:                Wed, 25 Nov 2026   Prob (F-statistic):                        0.00
+Time:                        14:35:51   Log-Likelihood:                         -83954.
+No. Observations:              167928   AIC:                                  1.679e+05
+Df Residuals:                  167916   BIC:                                  1.681e+05
+Df Model:                          12                                                  
+Covariance Type:              cluster                                                  
+=============================================================================================
+                                coef    std err          z      P>|z|      [0.025      0.975]
+---------------------------------------------------------------------------------------------
+partido_do_presidente         0.0343      0.006      6.135      0.000       0.023       0.045
+pres_x_capital                0.0243      0.034      0.708      0.479      -0.043       0.092
+pres_x_recente               -0.0431      0.008     -5.168      0.000      -0.060      -0.027
+capital                      -0.0449      0.004    -10.645      0.000      -0.053      -0.037
+pct_dep_federal_mesmo_ano     0.0046      0.000     44.059      0.000       0.004       0.005
+pct_vereador_anterior         0.0010      0.000      9.496      0.000       0.001       0.001
+ano_2004                      0.0076      0.002      4.845      0.000       0.005       0.011
+ano_2008                      0.0166      0.002      9.405      0.000       0.013       0.020
+ano_2012                      0.0126      0.002      6.291      0.000       0.009       0.016
+ano_2016                      0.0166      0.002      8.162      0.000       0.013       0.021
+ano_2020                      0.0095      0.002      4.262      0.000       0.005       0.014
+ano_2024                     -0.0020      0.003     -0.734      0.463      -0.007       0.003
+==============================================================================
+Omnibus:                    25023.331   Durbin-Watson:                   2.446
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            37948.867
+Skew:                           1.160   Prob(JB):                         0.00
+Kurtosis:                       2.802   Cond. No.                         476.
 ==============================================================================
 
 Notes:

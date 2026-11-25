@@ -46,6 +46,7 @@ ENTRADAS
 data/processed/presidente_municipio_candidato.parquet   (script 02)
 data/processed/prefeito_municipio_candidato.parquet     (script 05)
 data/processed/prefeito_municipio.parquet               (script 05)
+data/processed/proporcional_municipio_partido.parquet   (script 12; D38)
 data/manual/partidos_*.csv                              (via partidos.py)
 
 SAÍDAS
@@ -122,6 +123,30 @@ def prefeito_por_linhagem(pref: pd.DataFrame, ano: int,
             .agg(pct=("pct_votos", "sum"), n_candidatos=("nr_candidato", "size")))
 
 
+def juntar_proporcional(d: pd.DataFrame, prop: pd.DataFrame, ano: int, cargo: str,
+                        ano_destino: int, col_partido: str, nova: str) -> pd.DataFrame:
+    """
+    Acrescenta a `d` a coluna `nova`: o % do partido (coluna `col_partido`,
+    já como linhagem em `ano_destino`) numa eleição proporcional (D38).
+    Regra dos vazios, igual à D27:
+      - 0% se o partido disputou aquela eleição no Brasil, mas não teve
+        votos no município (e o município existia);
+      - vazio se o partido não disputou aquela eleição ou não há dados.
+    """
+    p = prop[(prop["ano"] == ano) & (prop["cargo"] == cargo)].copy()
+    if p.empty:
+        d[nova] = np.nan
+        return d
+    p = levar_para(p, "linhagem", ano, ano_destino, "lin_dest")
+    g = (p.groupby(["cd_municipio_tse", "lin_dest"], as_index=False)["pct_votos"].sum()
+         .rename(columns={"lin_dest": col_partido, "pct_votos": nova}))
+    d = d.merge(g, on=["cd_municipio_tse", col_partido], how="left")
+    zero = (d[nova].isna() & d[col_partido].isin(set(g[col_partido]))
+            & d["cd_municipio_tse"].isin(set(g["cd_municipio_tse"])))
+    d.loc[zero, nova] = 0.0
+    return d
+
+
 def partido_presidente_eleito(pres: pd.DataFrame, ano: int) -> tuple[str, str]:
     """Partido e nome do presidente eleito: mais votado no Brasil no último
     turno daquele ano (2º turno, se houve)."""
@@ -142,7 +167,7 @@ def salvar(df: pd.DataFrame, nome: str):
 # ---------------------------------------------------------------------------
 # Painel A — prefeito t -> presidente t+2
 # ---------------------------------------------------------------------------
-def painel_a(pres, res) -> pd.DataFrame:
+def painel_a(pres, res, prop) -> pd.DataFrame:
     partes = []
     for t, t2 in PARES_A:
         # Prefeito eleito em t, com o partido levado a t+2
@@ -174,6 +199,14 @@ def painel_a(pres, res) -> pd.DataFrame:
         sem = d["pct_presidente_eleicao_anterior"].isna() & d["partido_presidente"].isin(teve_ant)
         d.loc[sem, "pct_presidente_eleicao_anterior"] = 0.0
 
+        # Força do partido nas eleições proporcionais (D38):
+        #  - deputado federal na eleição geral anterior (t-2), antes do prefeito
+        #  - vereador na mesma eleição do prefeito (t)
+        d = juntar_proporcional(d, prop, t - 2, "deputado_federal", t2,
+                                "partido_presidente", "pct_dep_federal_anterior")
+        d = juntar_proporcional(d, prop, t, "vereador", t2,
+                                "partido_presidente", "pct_vereador_mesmo_ano")
+
         d["mesmo_partido"] = (d["partido_presidente"] == d["partido_prefeito"]).astype(int)
         # O partido do prefeito teve candidato a presidente em t+2?
         com_cand = d.groupby("cd_municipio_tse")["mesmo_partido"].transform("max")
@@ -195,13 +228,14 @@ def painel_a(pres, res) -> pd.DataFrame:
         "sg_partido_prefeito", "fonte_eleito", "partido_prefeito",
         "nr_candidato", "candidato_presidente", "sg_partido_presidente",
         "partido_presidente", "mesmo_partido", "partido_prefeito_tem_candidato",
-        "pct_votos_presidente", "pct_presidente_eleicao_anterior"]]
+        "pct_votos_presidente", "pct_presidente_eleicao_anterior",
+        "pct_dep_federal_anterior", "pct_vereador_mesmo_ano"]]
 
 
 # ---------------------------------------------------------------------------
 # Painel B — presidente t -> prefeito t+2
 # ---------------------------------------------------------------------------
-def painel_b(pres, pref, res) -> pd.DataFrame:
+def painel_b(pres, pref, res, prop) -> pd.DataFrame:
     partes = []
     for t, t2 in PARES_B:
         sigla_pres, nome_pres = partido_presidente_eleito(pres, t)
@@ -237,6 +271,14 @@ def painel_b(pres, pref, res) -> pd.DataFrame:
         d["elegeu_prefeito"] = (d["lin_dest"] == d["lin_eleito"]).astype(int)
         d.loc[d["partido_eleito"].isna(), "elegeu_prefeito"] = np.nan
 
+        # Força do partido nas eleições proporcionais (D38):
+        #  - deputado federal na mesma eleição geral do presidente (t)
+        #  - vereador na eleição municipal anterior (t-2)
+        d = juntar_proporcional(d, prop, t, "deputado_federal", t2,
+                                "lin_dest", "pct_dep_federal_mesmo_ano")
+        d = juntar_proporcional(d, prop, t2 - 4, "vereador", t2,
+                                "lin_dest", "pct_vereador_anterior")
+
         d["partido_do_presidente"] = (d["lin_dest"] == lin_pres).astype(int)
         d.insert(0, "presidente_eleito", nome_pres)
         d.insert(0, "partido_presidente_eleito", lin_pres)
@@ -254,7 +296,8 @@ def painel_b(pres, pref, res) -> pd.DataFrame:
               "presidente_eleito"] + COLS_MUN + [
         "partido", "partido_do_presidente", "teve_candidato",
         "n_candidatos_partido", "pct_prefeito_1t", "elegeu_prefeito",
-        "pct_prefeito_eleicao_anterior"]]
+        "pct_prefeito_eleicao_anterior", "pct_dep_federal_mesmo_ano",
+        "pct_vereador_anterior"]]
 
 
 # ---------------------------------------------------------------------------
@@ -284,11 +327,14 @@ def main():
     res = pd.read_parquet(PASTA / "prefeito_municipio.parquet")
     pres = adicionar_linhagem(pres, "sg_partido", "ano", "linhagem")
     pref = adicionar_linhagem(pref, "sg_partido", "ano", "linhagem")
+    prop = pd.read_parquet(PASTA / "proporcional_municipio_partido.parquet",
+                           columns=["ano", "cargo", "cd_municipio_tse", "sg_partido", "pct_votos"])
+    prop = adicionar_linhagem(prop, "sg_partido", "ano", "linhagem")
 
     print("\nPainel A — prefeito t -> presidente t+2")
-    a = painel_a(pres, res)
+    a = painel_a(pres, res, prop)
     print("\nPainel B — presidente t -> prefeito t+2")
-    b = painel_b(pres, pref, res)
+    b = painel_b(pres, pref, res, prop)
 
     print()
     conferir(a, b)
