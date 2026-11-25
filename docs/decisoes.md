@@ -439,6 +439,41 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Voto proporcional por partido
+
+### D36. Inclusão das eleições proporcionais
+- **Decisão do aluno (25/11/2026):** acrescentar o voto dos partidos para
+  deputado federal, deputado estadual (distrital no DF) e vereador.
+- **Por quê:** é a melhor medida da força prévia de cada partido no
+  município, para separar a relação prefeito × presidente da simples força
+  local do partido. Também permite usar o voto para deputado como um
+  terceiro cargo de comparação.
+- **Fonte:** TSE, arquivos `votacao_partido_munzona_{ANO}.zip`
+  (deputados 1994–2026; vereador 1996–2024). Scripts 11 (download) e 12
+  (montagem).
+
+### D37. Como o voto do partido é calculado
+- **Voto do partido = votos nominais válidos + votos de legenda**, somados
+  por município. É a soma usada pelo TSE para distribuir as cadeiras.
+- As colunas mudam ao longo do tempo: 1994–1998 e 2016+ usam
+  `QT_VOTOS_NOMINAIS_VALIDOS` + `QT_TOTAL_VOTOS_LEG_VALIDOS`; 2000–2014
+  usam `QT_VOTOS_NOMINAIS` + `QT_VOTOS_LEGENDA`.
+- **1994:** o arquivo do TSE traz os votos de legenda zerados; em 1994 o
+  voto do partido é só o nominal. Usar 1994 com cautela.
+- Só eleição ordinária. Não há votos do exterior nem em trânsito nesses
+  cargos.
+- Federações (2022+): os votos continuam registrados por partido, e a
+  análise segue por partido (D15, D25).
+- **Conferência:** totais nacionais para deputado federal iguais aos
+  resultados oficiais conhecidos em 2014 (PT 13.554.166; PMDB 10.791.949)
+  e 2018 (PT 10.126.611). PSL 2018 dá 11.435.001, cerca de 23 mil votos a
+  menos que o total divulgado na época (11.457.878), provavelmente por
+  votos anulados depois da eleição (como na D35).
+- O número de municípios com vereador em 1996 (5.507) é maior que o de
+  prefeito no mesmo ano (5.408; D22).
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

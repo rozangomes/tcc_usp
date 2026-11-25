@@ -40,6 +40,10 @@ python -m venv .venv
 # 10. (Opcional) Conferir o banco de prefeito com a Base dos Dados
 #     Precisa de um projeto no Google Cloud; abre o navegador para login
 .venv\Scripts\python src\10_conferir_base_dos_dados.py ID-DO-PROJETO
+
+# 11. Baixar os votos por partido (deputados e vereador) e montar o banco
+.venv\Scripts\python src\11_baixar_partido.py
+.venv\Scripts\python src\12_montar_proporcional.py
 ```
 
 Os dados brutos e processados **não** ficam no Git (são grandes); os scripts
@@ -61,6 +65,8 @@ de `output/`.
 | `src/08_analise_inicial.py` | Gráficos, correlações e regressões simples (com dummy de capital) dos dois painéis | `output/figuras/`, `output/tabelas/` |
 | `src/09_dados_dashboard.py` | Resume os painéis e os resultados do 08 em tabelas pequenas para o dashboard (por recorte: Brasil, capitais, não capitais e regiões) | `output/dashboard/` |
 | `src/10_conferir_base_dos_dados.py` | Confere o banco de prefeito com a Base dos Dados (municípios, votos e partido do eleito) | `output/tabelas/conferencia_base_dos_dados_*.csv` |
+| `src/11_baixar_partido.py` | Baixa do TSE os votos por partido, município e zona (deputados 1994–2026, vereador 1996–2024) | `data/raw/partido/` |
+| `src/12_montar_proporcional.py` | Banco de votos por partido (nominais + legenda) nas eleições proporcionais, por município | `data/processed/proporcional_municipio_partido.{parquet,csv}` |
 | `src/partidos.py` | Funções de linhagem e sucessão de partidos (usadas pelo 06 e pelo painel) | — |
 | `src/utils_tse.py` | Funções compartilhadas (leitura parcial dos ZIPs do TSE, filtro por cargo, registro de downloads) | — |
 
@@ -88,12 +94,13 @@ vercel deploy --prod
 | Votação nominal por município e zona — Presidente, 1998 (linhas de presidente do arquivo `_BRASIL.csv` de dentro do ZIP) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_1998.zip` | 25/11/2026 |
 | Votação nominal por município e zona — Prefeito, 1996–2024 (linhas de prefeito do arquivo `_BRASIL.csv` de dentro do ZIP) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_{ANO}.zip` | 25/11/2026 |
 | Códigos oficiais de UF e municípios segundo o TSE e o IBGE (tabela gerada pelo TSE em 22/11/2026) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/municipio_tse_ibge/municipio_tse_ibge.zip` | 25/11/2026 |
+| Votação por partido, município e zona — deputado federal, estadual e distrital (1994–2026) e vereador (1996–2024) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_partido_munzona/votacao_partido_munzona_{ANO}.zip` | 25/11/2026 |
 | Resultados por candidato e município, prefeito 1996–2024 (só para conferência) | Base dos Dados, tabela `basedosdados.br_tse_eleicoes.resultados_candidato_municipio` (Google BigQuery) | https://basedosdados.org/dataset/br-tse-eleicoes | 25/11/2026 |
 | Lista de municípios com região, mesorregião e microrregião | IBGE, API de Localidades | `https://servicodados.ibge.gov.br/api/v1/localidades/municipios?view=nivelado` | 25/11/2026 |
 
 O registro completo de cada arquivo (URL, data e hora, tamanho e código SHA-256)
 é gerado automaticamente em `registro_downloads.csv` dentro de cada pasta de
-`data/raw/` (`presidente/`, `prefeito/` e `municipios/`).
+`data/raw/` (`presidente/`, `prefeito/`, `municipios/` e `partido/`).
 
 ## Uso de IA generativa
 

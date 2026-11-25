@@ -163,6 +163,22 @@ anterior (D28).
 | `elegeu_prefeito` | 1 = o partido elegeu o prefeito (regra da D21); vazio se não há eleito identificado |
 | `pct_prefeito_eleicao_anterior` | % do partido no 1º turno para prefeito em *t − 2*, com fusões aplicadas (D27; vazio em 1996) |
 
+## `data/processed/proporcional_municipio_partido` (.parquet / .csv)
+Uma linha por **ano × cargo × município × partido** nas eleições
+proporcionais (D36, D37).
+
+| Coluna | Significado |
+|---|---|
+| `ano` | Ano da eleição |
+| `cargo` | `deputado_federal`, `deputado_estadual` (inclui distrital no DF) ou `vereador` |
+| `regiao`, `sg_uf`, `cd_municipio_tse`, `cd_municipio_ibge`, `nm_municipio`, `capital` | Município (como nas outras tabelas) |
+| `nr_partido`, `sg_partido` | Número e sigla do partido **no ano da eleição** |
+| `votos_nominais` | Votos válidos dados aos candidatos do partido |
+| `votos_legenda` | Votos de legenda (só no número do partido); 0 em 1994 (D37) |
+| `votos` | `votos_nominais + votos_legenda` |
+| `votos_validos_mun` | Soma dos votos de todos os partidos para o cargo no município |
+| `pct_votos` | `votos ÷ votos_validos_mun × 100` |
+
 ---
 
 Os arquivos .csv usam `;` como separador e `,` como decimal (padrão do Excel em português).
