@@ -17,6 +17,9 @@ python -m venv .venv
 
 # 3. Montar o banco por município
 .venv\Scripts\python src\02_montar_presidente_municipio.py
+
+# 4. Montar a tabela de correspondência TSE × IBGE
+.venv\Scripts\python src\03_tabela_tse_ibge.py
 ```
 
 Os dados brutos e processados **não** ficam no Git (são grandes); os scripts
@@ -28,6 +31,7 @@ acima os recriam.
 |---|---|---|
 | `src/01_baixar_presidente.py` | Baixa do TSE os votos para presidente por município e zona, 1994–2026 | `data/raw/presidente/` |
 | `src/02_montar_presidente_municipio.py` | Soma as zonas, tira exterior e trânsito, calcula % por município, adiciona região e dummy de capital | `data/processed/presidente_municipio*.{parquet,csv}` |
+| `src/03_tabela_tse_ibge.py` | Monta a correspondência entre código de município do TSE e do IBGE, com regiões geográficas e dummy de capital | `data/processed/municipios_tse_ibge.{parquet,csv}` |
 
 O significado de cada coluna está em [docs/dicionario_variaveis.md](docs/dicionario_variaveis.md).
 As decisões metodológicas estão em [docs/decisoes.md](docs/decisoes.md).
@@ -38,9 +42,12 @@ As decisões metodológicas estão em [docs/decisoes.md](docs/decisoes.md).
 |---|---|---|---|
 | Votação nominal por município e zona — Presidente, 1994, 2002–2026 (arquivo `_BR.csv` de dentro do ZIP) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_{ANO}.zip` | 25/11/2026 |
 | Votação nominal por município e zona — Presidente, 1998 (linhas de presidente do arquivo `_BRASIL.csv` de dentro do ZIP) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_1998.zip` | 25/11/2026 |
+| Códigos oficiais de UF e municípios segundo o TSE e o IBGE (tabela gerada pelo TSE em 22/11/2026) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/municipio_tse_ibge/municipio_tse_ibge.zip` | 25/11/2026 |
+| Lista de municípios com região, mesorregião e microrregião | IBGE, API de Localidades | `https://servicodados.ibge.gov.br/api/v1/localidades/municipios?view=nivelado` | 25/11/2026 |
 
 O registro completo de cada arquivo (URL, data e hora, tamanho e código SHA-256)
-é gerado automaticamente em `data/raw/presidente/registro_downloads.csv`.
+é gerado automaticamente em `data/raw/presidente/registro_downloads.csv` e
+`data/raw/municipios/registro_downloads.csv`.
 
 ## Uso de IA generativa
 

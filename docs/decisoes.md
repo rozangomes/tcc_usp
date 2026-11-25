@@ -71,6 +71,46 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Correspondência de códigos TSE × IBGE
+
+### D10. Fonte: tabela oficial do TSE, conferida com o IBGE
+- **O quê:** a correspondência vem da tabela "Códigos oficiais de UF e
+  municípios segundo o TSE e o IBGE", publicada pelo próprio TSE (5.571
+  municípios). Nome atual, região, mesorregião e microrregião vêm da API de
+  Localidades do IBGE.
+- **Conferências feitas (todas passaram):** todo código IBGE existe na lista
+  do IBGE; a UF é igual nas duas fontes; a relação é um-para-um; as 27
+  capitais batem pelo nome; todos os 5.572 códigos TSE do banco de presidente
+  (1994–2026) têm par.
+- **Por que não usar tabelas feitas por terceiros:** comparamos com uma tabela
+  pública muito usada (github.com/betafcc/Municipios-Brasileiros-TSE). Ela
+  difere da oficial em 7 municípios (5 na BA, 2 em SC), em que os códigos IBGE
+  de vizinhos em ordem alfabética estão trocados (ex.: Lagoa Real ↔ Lajedo do
+  Tabocal). Na tabela oficial, o nome do TSE e o nome do IBGE coincidem nesses
+  7 casos; o erro é da tabela de terceiros.
+- **Nomes diferentes:** 13 municípios têm grafia ou nome diferente no TSE e no
+  IBGE (ex.: "São Thomé das Letras" × "São Tomé das Letras"; "Governador
+  Edison Lobão" × "Ribeirãozinho do Maranhão"). O código é o mesmo; por isso
+  sempre juntamos bases **pelo código, nunca pelo nome**.
+- **Código:** `src/03_tabela_tse_ibge.py`
+
+### D11. Boa Esperança do Norte (MT): correspondência manual
+- **O quê:** o código TSE 91065 (usado só em 2002) não está na tabela oficial.
+  Foi ligado à mão ao IBGE 5101837, o mesmo do município recriado que votou
+  em 2026 com o código TSE 73709. Marcado com `correspondencia_manual = 1`.
+- **Por quê:** é o mesmo município, criado em 2000, extinto depois de 2002
+  (território voltou a Sorriso e Nova Ubiratã) e recriado. Tem 906 votos
+  válidos em 2002; o impacto é desprezível, mas o caso fica rastreável.
+- **Atenção no painel:** nesse caso, um código IBGE tem dois códigos TSE.
+  Ao juntar por código IBGE, os dois anos não se misturam (2002 e 2026).
+
+### D12. Dummy de capital pelo código IBGE
+- **O quê:** na tabela TSE × IBGE, `capital` é definida pelo código IBGE das
+  27 capitais. Conferido: dá exatamente o mesmo resultado que a definição
+  pelo nome usada no script 02.
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

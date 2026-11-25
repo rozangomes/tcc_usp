@@ -32,4 +32,29 @@ Uma linha por **município × ano × turno** (resumo).
 | `candidato_mais_votado_brasil` | Nome de urna desse candidato |
 | `pct_mais_votado_brasil` | % de votos válidos que esse candidato teve **no município** |
 
+## `data/processed/municipios_tse_ibge` (.parquet / .csv)
+Uma linha por **código de município do TSE** (5.572 linhas: os 5.571 municípios
+atuais mais 1 código antigo — ver D11 em `docs/decisoes.md`).
+
+| Coluna | Significado |
+|---|---|
+| `cd_municipio_tse` | Código do município no TSE (5 dígitos, texto) |
+| `cd_municipio_ibge` | Código do município no IBGE (7 dígitos, texto) |
+| `sg_uf` | Sigla da UF |
+| `cd_uf_ibge` | Código da UF no IBGE (2 dígitos) |
+| `nm_municipio_tse` | Nome do município segundo o TSE |
+| `nm_municipio_ibge` | Nome atual do município segundo o IBGE |
+| `regiao` | Região do IBGE |
+| `capital` | 1 = capital da UF (inclui Brasília); 0 = não capital |
+| `cd_mesorregiao`, `nm_mesorregiao` | Mesorregião geográfica do IBGE |
+| `cd_microrregiao`, `nm_microrregiao` | Microrregião geográfica do IBGE |
+| `correspondencia_manual` | 1 = ligação feita à mão (não consta da tabela oficial do TSE) |
+| `obs` | Explicação, quando houver correspondência manual |
+| `data_tabela_tse` | Data em que o TSE gerou a tabela oficial usada |
+
+**Regra:** junte bases sempre pelo código (`cd_municipio_tse` ou
+`cd_municipio_ibge`), nunca pelo nome do município.
+
+---
+
 Os arquivos .csv usam `;` como separador e `,` como decimal (padrão do Excel em português).
