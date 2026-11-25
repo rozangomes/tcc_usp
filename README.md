@@ -47,6 +47,10 @@ python -m venv .venv
 
 # 12. Baixar os votos para governador e montar a tabela de eleitos
 .venv\Scripts\python src\13_governador.py
+
+# 13. Perfil do eleitorado (TSE; demorado, ~1 GB lido) e PIB municipal (IBGE)
+.venv\Scripts\python src\14_perfil_eleitorado.py
+.venv\Scripts\python src\15_pib_municipal.py
 ```
 
 Depois dos passos 11 e 12, rode de novo os scripts 06 a 09 para atualizar a
@@ -74,6 +78,8 @@ de `output/`.
 | `src/11_baixar_partido.py` | Baixa do TSE os votos por partido, município e zona (deputados 1994–2026, vereador 1996–2024) | `data/raw/partido/` |
 | `src/12_montar_proporcional.py` | Banco de votos por partido (nominais + legenda) nas eleições proporcionais, por município | `data/processed/proporcional_municipio_partido.{parquet,csv}` |
 | `src/13_governador.py` | Baixa do TSE os votos para governador (1994–2022) e monta o governador eleito por UF e ano | `data/raw/governador/`, `data/processed/governador_uf.{parquet,csv}` |
+| `src/14_perfil_eleitorado.py` | Perfil do eleitorado por município e ano (sexo, idade, escolaridade), lido direto do TSE | `data/raw/perfil_eleitorado/`, `data/processed/perfil_eleitorado_municipio.{parquet,csv}` |
+| `src/15_pib_municipal.py` | PIB per capita municipal (2002–2023) pela API do IBGE | `data/raw/ibge_pib/`, `data/processed/pib_municipal.{parquet,csv}` |
 | `src/partidos.py` | Funções de linhagem e sucessão de partidos (usadas pelo 06 e pelo painel) | — |
 | `src/utils_tse.py` | Funções compartilhadas (leitura parcial dos ZIPs do TSE, filtro por cargo, registro de downloads) | — |
 
@@ -102,6 +108,8 @@ vercel deploy --prod
 | Votação nominal por município e zona — Prefeito, 1996–2024 (linhas de prefeito do arquivo `_BRASIL.csv` de dentro do ZIP) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_{ANO}.zip` | 25/11/2026 |
 | Códigos oficiais de UF e municípios segundo o TSE e o IBGE (tabela gerada pelo TSE em 22/11/2026) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/municipio_tse_ibge/municipio_tse_ibge.zip` | 25/11/2026 |
 | Votação nominal por município e zona — Governador, 1994–2022 (linhas de governador do arquivo `_BRASIL.csv` de dentro do ZIP) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_{ANO}.zip` | 25/11/2026 |
+| Perfil do eleitorado por município e zona (sexo, faixa etária, escolaridade), 1994–2026 | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/perfil_eleitorado/perfil_eleitorado_{ANO}.zip` | 25/11/2026 |
+| PIB dos Municípios (tabela 5938), população estimada (6579) e Censos 2010 (202) e 2022 (4709) | IBGE, API SIDRA | `https://apisidra.ibge.gov.br/values/t/{TABELA}/...` (consultas exatas em `data/raw/ibge_pib/registro_downloads.csv`) | 25/11/2026 |
 | Votação por partido, município e zona — deputado federal, estadual e distrital (1994–2026) e vereador (1996–2024) | TSE, Portal de Dados Abertos | `https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_partido_munzona/votacao_partido_munzona_{ANO}.zip` | 25/11/2026 |
 | Resultados por candidato e município, prefeito 1996–2024 (só para conferência) | Base dos Dados, tabela `basedosdados.br_tse_eleicoes.resultados_candidato_municipio` (Google BigQuery) | https://basedosdados.org/dataset/br-tse-eleicoes | 25/11/2026 |
 | Lista de municípios com região, mesorregião e microrregião | IBGE, API de Localidades | `https://servicodados.ibge.gov.br/api/v1/localidades/municipios?view=nivelado` | 25/11/2026 |

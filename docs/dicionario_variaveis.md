@@ -198,6 +198,37 @@ Uma linha por **ano × UF** (eleições gerais 1994–2022; D39).
 | `governador_eleito` | Nome de urna |
 | `turno_decisao` | Turno em que foi eleito (1 ou 2) |
 
+## `data/processed/perfil_eleitorado_municipio` (.parquet / .csv)
+Uma linha por **ano × município** (1994–2026; D40). Características do
+município, não do eleitor.
+
+| Coluna | Significado |
+|---|---|
+| `ano`, `sg_uf`, `cd_municipio_tse` | Eleição e município |
+| `eleitores` | Eleitores aptos no município |
+| `pct_mulheres` | % de eleitoras |
+| `pct_16_24_anos`, `pct_60_mais` | % de eleitores de 16 a 24 anos e de 60 anos ou mais (a partir de 2008) |
+| `pct_ate_le_escreve` | % de eleitores analfabetos ou que só leem e escrevem (a partir de 2000) |
+| `pct_superior_completo` | % com superior completo (a partir de 2000) |
+
+## `data/processed/pib_municipal` (.parquet / .csv)
+Uma linha por **município × ano** (2002–2023; D41).
+
+| Coluna | Significado |
+|---|---|
+| `cd_municipio_ibge`, `ano` | Município (código IBGE) e ano |
+| `pib_mil_reais` | PIB a preços correntes, em mil reais |
+| `populacao` | População (estimativa ou Censo) |
+| `populacao_interpolada` | 1 = população interpolada (2007 e 2023) |
+| `pib_per_capita` | PIB ÷ população, em reais correntes |
+
+## Colunas de perfil nos dois painéis
+Os painéis `painel_prefeito_presidente` e `painel_presidente_prefeito`
+também trazem, para o município na eleição de destino (*t + 2*):
+`eleitores`, `pct_mulheres`, `pct_16_24_anos`, `pct_60_mais`,
+`pct_ate_le_escreve`, `pct_superior_completo` (D40), `ano_pib`,
+`pib_per_capita` e `log_pib_per_capita` (D41).
+
 ---
 
 Os arquivos .csv usam `;` como separador e `,` como decimal (padrão do Excel em português).

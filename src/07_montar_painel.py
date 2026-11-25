@@ -48,6 +48,8 @@ data/processed/prefeito_municipio_candidato.parquet     (script 05)
 data/processed/prefeito_municipio.parquet               (script 05)
 data/processed/proporcional_municipio_partido.parquet   (script 12; D38)
 data/processed/governador_uf.parquet                    (script 13; D39)
+data/processed/perfil_eleitorado_municipio.parquet      (script 14; D40)
+data/processed/pib_municipal.parquet                    (script 15; D41)
 data/manual/partidos_*.csv                              (via partidos.py)
 
 SAÍDAS
@@ -155,6 +157,28 @@ def governador_por_uf(gov: pd.DataFrame, ano: int, ano_destino: int) -> pd.DataF
     g["lin"] = [linhagem(s, ano) for s in g["sg_partido_gov"]]
     g = levar_para(g, "lin", ano, ano_destino, "partido_governador")
     return g[["sg_uf", "partido_governador"]]
+
+
+PERFIL = ["eleitores", "pct_mulheres", "pct_16_24_anos", "pct_60_mais",
+          "pct_ate_le_escreve", "pct_superior_completo"]
+
+
+def adicionar_perfil(df: pd.DataFrame, col_ano: str, perfil: pd.DataFrame,
+                     pib: pd.DataFrame) -> pd.DataFrame:
+    """
+    Acrescenta o perfil do município na eleição de destino (D40, D41):
+      - perfil do eleitorado do TSE no mesmo ano da eleição (`col_ano`);
+      - PIB per capita do ano anterior à eleição (o IBGE publica até 2023;
+        para 2024 e 2026 usa 2023; antes de 2003 fica vazio).
+    São características do município, não do eleitor (falácia ecológica).
+    """
+    p = perfil.rename(columns={"ano": col_ano})[[col_ano, "cd_municipio_tse"] + PERFIL]
+    df = df.merge(p, on=[col_ano, "cd_municipio_tse"], how="left")
+    df["ano_pib"] = (df[col_ano] - 1).clip(upper=int(pib["ano"].max()))
+    q = pib.rename(columns={"ano": "ano_pib"})[["ano_pib", "cd_municipio_ibge", "pib_per_capita"]]
+    df = df.merge(q, on=["ano_pib", "cd_municipio_ibge"], how="left")
+    df["log_pib_per_capita"] = np.log(df["pib_per_capita"])
+    return df
 
 
 def partido_presidente_eleito(pres: pd.DataFrame, ano: int) -> tuple[str, str]:
@@ -353,11 +377,15 @@ def main():
     prop = adicionar_linhagem(prop, "sg_partido", "ano", "linhagem")
     gov = pd.read_parquet(PASTA / "governador_uf.parquet").rename(
         columns={"partido_governador": "sg_partido_gov"})  # script 13
+    perfil = pd.read_parquet(PASTA / "perfil_eleitorado_municipio.parquet")  # script 14
+    pib = pd.read_parquet(PASTA / "pib_municipal.parquet")  # script 15
 
     print("\nPainel A — prefeito t -> presidente t+2")
     a = painel_a(pres, res, prop, gov)
+    a = adicionar_perfil(a, "ano_presidente", perfil, pib)
     print("\nPainel B — presidente t -> prefeito t+2")
     b = painel_b(pres, pref, res, prop, gov)
+    b = adicionar_perfil(b, "ano_municipal", perfil, pib)
 
     print()
     conferir(a, b)

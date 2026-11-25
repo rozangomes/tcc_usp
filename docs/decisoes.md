@@ -538,6 +538,69 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Perfil dos municípios
+
+### D40. Perfil do eleitorado (TSE)
+- **Fonte:** TSE, `perfil_eleitorado_{ANO}.zip` (1994–2026). Script
+  `src/14_perfil_eleitorado.py`. Os arquivos de 2008 em diante são grandes
+  (até 1,8 GB descompactados); são lidos direto do servidor e só a soma
+  por município, sexo, idade e escolaridade é guardada (com URL, data,
+  tamanho e ETag no registro de downloads).
+- **Indicadores por município e ano:** eleitores aptos, % mulheres, % de 16
+  a 24 anos, % de 60 anos ou mais, % analfabetos ou que só leem e
+  escrevem, % com superior completo. Eleitores no exterior (ZZ) ficam fora.
+- **Disponibilidade:** sexo em todos os anos; escolaridade a partir de
+  2000; faixa etária a partir de 2008. Antes disso as colunas ficam vazias.
+- **Cuidado (falácia ecológica):** são características do município, não do
+  eleitor. Permitem dizer "em municípios com mais idosos a relação é
+  maior", nunca "os idosos votam assim".
+- **No painel:** perfil do mesmo ano da eleição de destino (*t + 2*).
+
+### D41. PIB per capita municipal (IBGE)
+- **Fonte:** API SIDRA do IBGE. PIB dos Municípios (tabela 5938, 2002–2023)
+  e população (estimativas, tabela 6579; Censos 2010, tabela 202, e 2022,
+  tabela 4709). Em 2007 e 2023 a população é interpolada entre o ano
+  anterior e o seguinte. Script `src/15_pib_municipal.py`.
+- **Por que PIB e não renda:** é a única medida de riqueza municipal
+  publicada todo ano. Renda domiciliar per capita só existe nos Censos.
+  **Limitação:** PIB per capita mede a produção no município, não a renda
+  das famílias.
+- **No painel:** PIB per capita do ano anterior à eleição de destino (o mais
+  recente é 2023, usado para 2024 e 2026; vazio antes de 2003), em reais
+  correntes, com a coluna `log_pib_per_capita` para as regressões.
+
+---
+
+### D42. A relação muda conforme o perfil do município? (modelos 5)
+- **Especificação:** A5 = A4 e B5 = B4, mais quatro características do
+  município, cada uma padronizada (média 0, desvio-padrão 1), e a interação
+  de cada uma com a variável-chave (`mesmo_partido` no A;
+  `partido_do_presidente` no B): log do PIB per capita (D41), % de
+  eleitores com 60 anos ou mais e % com superior completo (D40), e log do
+  número de eleitores (porte).
+- **Por que interações e não só controles:** com efeito fixo de candidato ×
+  UF (A) ou partido × UF (B), uma característica do município sozinha mede
+  um efeito médio entre candidatos/partidos que pouco diz. A interação
+  responde à pergunta de interesse: a relação é maior ou menor nesse tipo
+  de município?
+- **Amostra menor:** a idade dos eleitores só existe a partir de 2008, então
+  A5 usa as eleições presidenciais de 2010 em diante e B5 as municipais de
+  2008 em diante. Por isso o termo "ciclo recente" compara com um período
+  mais curto que nos modelos 1 a 4 e não deve ser comparado diretamente
+  com eles.
+- **Resultado inicial (associação):**
+  - A5: a relação prefeito → presidente é maior em municípios de PIB per
+    capita mais alto (+0,56 ponto por desvio-padrão) e menor nos maiores
+    municípios (−0,59).
+  - B5: a vantagem do partido do presidente no voto para prefeito é menor
+    em municípios mais ricos (−2,3), com mais idosos (−2,0) e com mais
+    pessoas com ensino superior (−1,1), e maior nos maiores municípios
+    (+1,6).
+- **Cuidado:** são características do município, não do eleitor (falácia
+  ecológica).
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

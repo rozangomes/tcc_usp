@@ -43,7 +43,11 @@ causalidade.
      deputado federal na mesma eleição do presidente e para vereador na
      eleição municipal anterior (D38); o B4, se o partido é o do
      governador (D39).
-   Ver D29-D31, D38 e D39 em docs/decisoes.md.
+   - Modelos A5 e B5: acrescentam o perfil do município (PIB per capita,
+     % de idosos, % com superior, porte) padronizado e em interação com a
+     variável-chave, para ver se a relação muda conforme o tipo de
+     município (só 2008 em diante).
+   Ver D29-D31, D38, D39 e D42 em docs/decisoes.md.
 
 COMO RODAR
 ----------
@@ -265,6 +269,26 @@ def correlacao_b(b, pres):
 
 
 # ---------------------------------------------------------------------------
+# Perfil do município usado nos modelos 5 (D42). Cada um é padronizado
+# (média 0, desvio-padrão 1): o coeficiente da interação diz quanto a relação
+# muda num município "1 desvio-padrão acima da média" naquela característica.
+PERFIL_MODELO = {"log_pib_per_capita": "pib", "pct_60_mais": "idosos",
+                 "pct_superior_completo": "superior", "log_eleitores": "porte"}
+
+
+def interacoes_perfil(df: pd.DataFrame, chave: str, prefixo: str) -> list:
+    """Cria z_<nome> (padronizado) e <prefixo>_x_<nome> = chave × z_<nome>.
+    Devolve a lista de colunas para o modelo (efeitos principais + interações)."""
+    df["log_eleitores"] = np.log(df["eleitores"])
+    cols = []
+    for orig, nome in PERFIL_MODELO.items():
+        z = (df[orig] - df[orig].mean()) / df[orig].std()
+        df[f"z_{nome}"] = z
+        df[f"{prefixo}_x_{nome}"] = df[chave] * z
+        cols += [f"z_{nome}", f"{prefixo}_x_{nome}"]
+    return cols
+
+
 def regressoes(a_sel, b):
     saida, textos = [], []
 
@@ -278,10 +302,12 @@ def regressoes(a_sel, b):
     a["mesmo_x_governador"] = a["mesmo_partido"] * a["candidato_partido_governador"]
     a["grupo"] = a["ano_presidente"].astype(str) + a["candidato_presidente"] + a["sg_uf"]
     xs = ["mesmo_partido", "mesmo_x_capital", "mesmo_x_recente", "capital"]
+    perfil_a = interacoes_perfil(a, "mesmo_partido", "mesmo")
+    a4 = ["pct_dep_federal_anterior", "prefeito_partido_governador", "mesmo_x_governador"]
     for nome, extra in [("A1", []), ("A2", ["pct_presidente_eleicao_anterior"]),
                         ("A3", ["pct_dep_federal_anterior"]),
-                        ("A4", ["pct_dep_federal_anterior", "prefeito_partido_governador",
-                                "mesmo_x_governador"])]:
+                        ("A4", a4),
+                        ("A5", a4 + perfil_a)]:  # só 2010+ (idade desde 2008; D42)
         r, n = mqo_com_efeito_fixo(a, "pct_votos_presidente", xs + extra, "grupo",
                                    "cd_municipio_tse")
         saida.append(tabela_coef(r, n, nome, "pct_votos_presidente"))
@@ -294,11 +320,13 @@ def regressoes(a_sel, b):
     b["pres_x_recente"] = b["partido_do_presidente"] * b["recente"]
     b["grupo"] = b["partido"] + b["sg_uf"]
     xs = ["partido_do_presidente", "pres_x_capital", "pres_x_recente", "capital"]
+    perfil_b = interacoes_perfil(b, "partido_do_presidente", "pres")
+    b4 = ["pct_dep_federal_mesmo_ano", "pct_vereador_anterior", "partido_do_governador"]
     for y in ["pct_prefeito_1t", "elegeu_prefeito"]:
         for nome, extra in [("B1", []), ("B2", ["pct_prefeito_eleicao_anterior"]),
                             ("B3", ["pct_dep_federal_mesmo_ano", "pct_vereador_anterior"]),
-                            ("B4", ["pct_dep_federal_mesmo_ano", "pct_vereador_anterior",
-                                    "partido_do_governador"])]:
+                            ("B4", b4),
+                            ("B5", b4 + perfil_b)]:  # só 2008+ (D42)
             r, n = mqo_com_efeito_fixo(b, y, xs + extra, "grupo", "cd_municipio_tse",
                                        col_ano="ano_municipal")
             saida.append(tabela_coef(r, n, nome, y))
