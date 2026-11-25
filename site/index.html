@@ -58,6 +58,12 @@
   .tip .m { color: var(--muted); }
   .dois { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 20px; }
   .rolagem { overflow-x: auto; }
+  .pergunta { margin: 0; font-family: var(--serif); font-size: clamp(19px, 2.6vw, 23px); line-height: 1.35; text-wrap: balance; max-width: 60ch; }
+  .direcoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+  .direcoes > div { border-top: 2px solid var(--line); padding-top: 10px; min-width: 0; }
+  .direcoes h3 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+  .direcoes p { margin: 0 0 6px; }
+  .direcoes .par { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
   table { border-collapse: collapse; width: 100%; font-size: 12.5px; font-variant-numeric: tabular-nums; }
   th { text-align: left; font-weight: 500; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
   td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -80,6 +86,24 @@
     <p class="lead">Em <b id="pos">—</b> de <b id="tot">—</b> candidaturas a presidente analisadas, o candidato teve votação média maior nos municípios governados pelo seu partido. Na direção inversa, o partido do presidente eleito teve, nas eleições municipais seguintes, uma diferença de <b id="coefb">—</b> pontos no voto para prefeito em relação a ele mesmo fora da Presidência.</p>
     <p class="meta">Todos os municípios do Brasil, 1996–2026, dados do TSE. TCC de Rozan Gomes (pós-graduação em Marketing Político e Campanhas Eleitorais, USP), orientação do Prof. Lucas Damasceno.</p>
   </header>
+
+  <section class="card perguntas" id="perguntas">
+    <h2>Pergunta de pesquisa</h2>
+    <p class="pergunta">Qual é a relação entre o voto para presidente e o voto para prefeito nos municípios brasileiros?</p>
+    <div class="direcoes">
+      <div>
+        <h3>1. Prefeito → presidente</h3>
+        <p>Um município governado pelo partido X dá mais votos ao candidato a presidente do partido X na eleição seguinte?</p>
+        <p class="par">Prefeito eleito em t × voto para presidente em t+2 (ex.: 2020 → 2022)</p>
+      </div>
+      <div>
+        <h3>2. Presidente → prefeito</h3>
+        <p>Ter o partido na Presidência favorece ou prejudica esse partido nas eleições municipais seguintes?</p>
+        <p class="par">Presidente eleito em t × eleição municipal em t+2 (ex.: 2022 → 2024)</p>
+      </div>
+    </div>
+    <p class="sub">Em cada direção: existe relação (H1) ou não (H0)? O sinal é positivo ou negativo? Hipóteses secundárias: a relação é diferente nas capitais? Ficou mais forte nos ciclos recentes (2022, 2024 e 2026)?</p>
+  </section>
 
   <div class="filtro">
     <label for="recorte">Recorte dos municípios</label>
