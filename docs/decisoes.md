@@ -391,6 +391,52 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 - O aviso de resultados preliminares deve sair só depois da revisão do
   orientador e das conferências pendentes (totais de 2026, datas de fusão).
 
+### D34. Tentativa de conferência com o CEPESP Data (25/11/2026)
+- **Objetivo:** conferir os bancos de prefeito com o CEPESP Data (FGV).
+- **Resultado:** não foi possível baixar os dados de forma automática.
+  - A antiga API (`cepesp.io`, usada pelos pacotes cepespR e CepespPython)
+    está fora do ar; o domínio hoje redireciona para um site sem relação
+    com o CEPESP.
+  - O site atual (https://cepesp.fgv.br/consultas-de-dados) mostra os dados
+    num painel Power BI embutido, sem download direto.
+  - O próprio CEPESP informa que a API cobre 1998–2018 e que uma nova
+    plataforma (CEPESPDATA) será lançada "nas próximas semanas".
+- **Consequência:** os bancos continuam vindo só do TSE (D2, D18). A
+  conferência externa fica pendente.
+
+### D35. Conferência com a Base dos Dados (25/11/2026)
+- **Fonte:** Base dos Dados, tabela
+  `basedosdados.br_tse_eleicoes.resultados_candidato_municipio`, consultada
+  no BigQuery (projeto Google Cloud do aluno). Só cargo prefeito,
+  1996–2024, eleição ordinária. Script `src/10_conferir_base_dos_dados.py`.
+- **Resultados (2000–2024):**
+  - Número de municípios: idêntico em 2000–2012; diferença de 1 ou 2
+    municípios em 2016, 2020 e 2024.
+  - Total de votos por município, ano e turno: 99,94% idêntico.
+  - Partido do prefeito eleito: 100% igual depois de juntar as
+    renomeações, com uma exceção (Teresópolis 2016). A Base dos Dados usa
+    a sigla atual em 2016 (ex.: "MDB" onde o TSE registra "PMDB"), o que
+    confirma a necessidade da tabela de linhagem (D23).
+- **1996:** a Base dos Dados tem só 117 municípios em 1996, então não serve
+  para conferir esse ano.
+- **Origem das diferenças:** a Base dos Dados mantém candidatos cujos votos
+  foram anulados depois da eleição (registro indeferido ou cassado); o
+  arquivo atual do TSE (gerado em 25/11/2026) não traz esses candidatos.
+  Exemplos: Teresópolis 2016 (candidato do PP, 35.100 votos, marcado como
+  eleito na Base dos Dados), Porto Real 2024 (PDT), Campinas 2024 (PCO).
+  Isso não muda os votos válidos usados no painel.
+- **Casos sem prefeito eleito no nosso banco (20):** em 8 deles a Base dos
+  Dados aponta um eleito na eleição ordinária (Coreaú e Itapoá em 2020;
+  Mercês, Tucuruí, Equador, São Miguel do Gostoso, Narandiba e Sarutaiá
+  em 2024). São, provavelmente, eleitos cujos votos foram anulados depois.
+- **Ponto para decidir (aluno/orientador):** qual "prefeito eleito" usar
+  quando a Justiça Eleitoral anula a eleição: o resultado da noite da
+  eleição (Base dos Dados), o resultado atualizado do TSE (atual) ou o
+  vencedor da eleição suplementar (coluna `partido_eleito_ultima_suplementar`).
+  Ex.: em Teresópolis 2016, o nosso banco aponta o MDB (2º colocado, que o
+  TSE hoje marca como eleito), mas o prefeito de fato veio da suplementar
+  (Cidadania).
+
 ---
 
 ## Observações sobre a qualidade dos dados (25/11/2026)
