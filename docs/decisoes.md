@@ -111,6 +111,114 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Definições do desenho (decididas pelo aluno)
+
+### D13. O segundo cargo é prefeito
+- **O quê:** a comparação é presidente × **prefeito**, em todos os municípios
+  e em todas as eleições municipais com dados no TSE (1996–2024). São usados
+  os votos de todos os candidatos a prefeito, não só dos eleitos.
+- **Substitui:** a proposta original (presidente × deputado federal, só em
+  Magé, 2018–2026).
+
+### D14. A série começa em 1994 (confirma D1)
+- **O quê:** aceito que a série municipal de presidente começa em 1994, porque
+  o TSE não publica 1989 por município.
+
+### D15. Unidade de análise: o partido
+- **O quê:** a análise é feita por **partido**, com todos os partidos, e não
+  por campo político (esquerda/direita).
+- **Consequência:** coligações e federações não são somadas; conta o partido
+  do candidato. Mudanças de nome e fusões de partido serão tratadas por uma
+  tabela de equivalência.
+
+### D16. Pareamento das eleições
+- **Prefeito → presidente:** partido do prefeito eleito em *t* × voto do
+  candidato a presidente desse partido no município em *t + 2*
+  (1996→1998, 2000→2002, …, 2024→2026).
+- **Presidente → prefeito:** partido do presidente eleito em *t* × desempenho
+  desse partido nas eleições municipais de *t + 2*
+  (1994→1996, 1998→2000, …, 2022→2024).
+- **Limitação aceita:** desde 1994 só três partidos (ou quatro, contando a
+  troca PSL→PL) chegaram à Presidência: PSDB, PT e PSL/PL.
+
+### D17. Evitar o conceito de "polarização"
+- **O quê:** o trabalho evita o termo. Se ele for usado, o aluno define qual
+  conceito de polarização, com autor e justificativa.
+
+---
+
+## 25/11/2026 — Votos para prefeito por município
+
+### D18. Fonte e filtro dos dados de prefeito
+- **O quê:** de cada ZIP `votacao_candidato_munzona_{ANO}` (1996–2024) lemos o
+  arquivo nacional `_BRASIL.csv` e guardamos só as linhas com
+  `DS_CARGO = Prefeito`, copiadas sem alteração. As linhas de vereador são
+  descartadas.
+- **Código:** `src/04_baixar_prefeito.py` (usa `src/utils_tse.py`).
+
+### D19. Coluna de votos e votos anulados
+- **2000:** `QT_VOTOS_NOMINAIS` vem zerada; usamos `QT_VOTOS_NOMINAIS_VALIDOS`
+  (mesmo problema de 1998 para presidente).
+- **Votos anulados** (candidato com registro negado/cassado) não contam como
+  válidos. Até 2012, isso é identificado pela situação da candidatura
+  (INAPTO, INDEFERIDO, INDEFERIDO POR IMPUGNAÇÃO, CASSAÇÃO DO REGISTRO,
+  CANCELAMENTO). De 2016 em diante, segue-se a marcação do próprio TSE em
+  `NM_TIPO_DESTINACAO_VOTOS` (Válido × Anulado × Anulado sub judice).
+- **Peso:** os votos anulados no 1º turno vão de 0 a 1,0% do total
+  (o máximo foi em 2024, com 1,14 milhão).
+- **Limitação:** em 2000, candidatos *sub judice* (5 milhões de votos) foram
+  mantidos como válidos, porque a situação final deles não está no arquivo.
+
+### D20. Só a eleição ordinária entra no banco de votos
+- **O quê:** o banco de votos (`prefeito_municipio_candidato`) usa só a
+  eleição ordinária de outubro (1º e 2º turnos). As eleições suplementares
+  (chamadas "extraordinárias" no TSE a partir de 2016) ficam de fora.
+- **Por quê:** elas acontecem meses ou anos depois, em outro contexto, e não
+  são comparáveis à ordinária.
+- **Detalhe técnico:** a partir de 2016 o TSE dá um código de eleição diferente
+  a cada turno da ordinária, e Macapá (2020) teve códigos próprios, porque a
+  eleição foi adiada pelo apagão. A ordinária é agrupada por município e ano,
+  não pelo código.
+
+### D21. Quem é o prefeito eleito
+- **Regra:** é o candidato com situação "ELEITO" no último turno da eleição
+  ordinária. Se a ordinária não teve eleito, porque a eleição foi anulada,
+  usamos o eleito da **primeira** suplementar do ciclo
+  (`fonte_eleito = "suplementar"`): 1 caso em 2008, 1 em 2012, 43 em 2016,
+  70 em 2020 e 27 em 2024.
+- **Robustez:** o banco informa se houve suplementar no ciclo
+  (`teve_suplementar`) e o partido do vencedor da última suplementar.
+  O partido mudou depois da suplementar em 40 (2004), 112 (2008), 85 (2012),
+  101 (2016), 24 (2020) e 10 (2024) municípios. Esses casos podem ser
+  excluídos num teste de robustez.
+- **Sem eleito identificado:** 20 casos em ~44 mil (0,05%), listados na saída
+  do script 05. Ficam sem partido.
+
+### D22. Lacunas nos dados do TSE para prefeito
+- **1996:** faltam ~104 municípios na base do TSE (74 no Maranhão, 19 no Pará
+  e outros 11). Os dados existentes cobrem 5.408 municípios. Limitação a
+  declarar; não há outra fonte oficial no Portal do TSE.
+- **Fernando de Noronha (PE)** não tem prefeito (é distrito estadual) e não
+  aparece em nenhum ano. **DF** também não tem prefeito.
+- **Municípios criados depois** (ex.: Mojuí dos Campos, Paraíso das Águas,
+  Pescaria Brava, Balneário Rincão, Pinto Bandeira, instalados em 2013)
+  só aparecem a partir de quando passam a votar.
+- **Sem votos registrados:** Bom Jesus de Goiás (GO, 2012) e Brejo Alegre
+  (SP, 2024) têm zero votos válidos na ordinária no arquivo do TSE; ficam com
+  `pct_votos` vazio.
+- **2024:** 8 municípios não têm a eleição ordinária no arquivo (Anajatuba,
+  Guimarães e Santana do Maranhão/MA; Barra dos Coqueiros, Cedro de São João e
+  Nossa Senhora do Socorro/SE; Iporá e Americano do Brasil/GO).
+
+### Conferência com fatos conhecidos (25/11/2026)
+- Partido do prefeito eleito em São Paulo, Rio de Janeiro e Belo Horizonte,
+  1996–2024: todos corretos (ex.: São Paulo = PPB, PT, PSDB, DEM, PT, PSDB,
+  PSDB, MDB).
+- Prefeitos por partido em 2024: PSD 890, MDB 862, PP 750, União 591, PL 517,
+  em linha com o noticiado após a eleição.
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

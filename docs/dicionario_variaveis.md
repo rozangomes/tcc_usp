@@ -55,6 +55,43 @@ atuais mais 1 código antigo — ver D11 em `docs/decisoes.md`).
 **Regra:** junte bases sempre pelo código (`cd_municipio_tse` ou
 `cd_municipio_ibge`), nunca pelo nome do município.
 
+## `data/processed/prefeito_municipio_candidato` (.parquet / .csv)
+Uma linha por **município × ano × turno × candidato a prefeito**, só da
+eleição **ordinária** (1996–2024).
+
+| Coluna | Significado |
+|---|---|
+| `ano` | Ano da eleição municipal |
+| `turno` | 1 ou 2 |
+| `regiao`, `sg_uf`, `capital` | Como nas outras tabelas (capital vem do código IBGE) |
+| `cd_municipio_tse`, `cd_municipio_ibge` | Códigos do município no TSE e no IBGE |
+| `nm_municipio` | Nome atual do município segundo o IBGE |
+| `nr_candidato`, `nm_urna_candidato` | Número e nome de urna |
+| `sg_partido` | Sigla do partido **no ano da eleição** |
+| `situacao_turno` | Resultado do candidato no turno: ELEITO, NÃO ELEITO, 2º TURNO |
+| `apto` | 1 = votos válidos; 0 = votos anulados (registro negado/cassado) |
+| `votos` | Votos do candidato (soma das zonas) |
+| `votos_validos_mun` | Soma dos votos dos candidatos aptos no município e turno |
+| `pct_votos` | `votos ÷ votos_validos_mun × 100` (0 para não aptos; vazio se o município não tem votos registrados) |
+
+## `data/processed/prefeito_municipio` (.parquet / .csv)
+Uma linha por **município × ano** de eleição municipal.
+
+| Coluna | Significado |
+|---|---|
+| `ano`, `regiao`, `sg_uf`, `cd_municipio_tse`, `cd_municipio_ibge`, `nm_municipio`, `capital` | Como acima |
+| `partido_eleito` | Partido do prefeito eleito (regra em D21) |
+| `candidato_eleito` | Nome de urna do prefeito eleito |
+| `fonte_eleito` | `ordinária` ou `suplementar` (quando a ordinária não teve eleito) |
+| `data_eleicao_eleito` | Data da eleição (do turno) em que ele foi eleito |
+| `pct_eleito_1t` | % de votos válidos do partido do eleito no 1º turno da ordinária (vazio se o eleito veio de suplementar) |
+| `teve_2turno` | 1 = houve 2º turno na ordinária |
+| `n_candidatos_1t` | Número de candidatos no 1º turno |
+| `votos_validos_1t` | Votos válidos no 1º turno |
+| `teve_suplementar` | 1 = houve eleição suplementar para prefeito no ciclo |
+| `partido_eleito_ultima_suplementar` | Partido do vencedor da última suplementar do ciclo |
+| `data_ultima_suplementar` | Data dessa suplementar |
+
 ---
 
 Os arquivos .csv usam `;` como separador e `,` como decimal (padrão do Excel em português).

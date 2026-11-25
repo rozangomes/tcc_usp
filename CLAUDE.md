@@ -18,13 +18,14 @@ Hipóteses secundárias:
 - O efeito difere entre capitais e não capitais (usar uma dummy de capital).
 - A relação ficou mais forte nos ciclos recentes (2022, 2024 e 2026).
 
-⚠️ **Ponto em aberto:** a proposta original comparava presidente com **deputado federal**, só em Magé (RJ), de 2018 a 2026. Na reunião, o orientador falou de **prefeito**. Ainda falta confirmar com ele qual é o cargo. Enquanto isso, trabalhe primeiro no que serve aos dois cenários, que são os votos para presidente por município.
+✅ **Cargo definido (25/11/2026):** o segundo cargo é **prefeito**, em todas as eleições municipais (1996–2024). Essa decisão substitui a proposta original, que era deputado federal só em Magé. Ver D13 a D16 em `docs/decisoes.md`.
 
 ## Desenho
 - Todos os municípios do Brasil, em série histórica desde a redemocratização.
 - Dados agregados mostram associação, não causalidade. Fale em "associação" ou "relação", nunca em "efeito causal".
 - Controles: capital (dummy), região e UF; opcionalmente renda per capita (IBGE).
-- "Polarização": só usar se o conceito for bem definido, com autor e justificativa.
+- "Polarização": **evitar** (decisão de 25/11/2026). Se for inevitável, o aluno escolhe e define qual conceito usar, com autor e justificativa. Não introduzir o termo em códigos, gráficos ou tabelas.
+- Unidade de análise: **o partido**, com todos os partidos, e não o campo político.
 
 ## Fontes de dados
 - TSE, Portal de Dados Abertos: https://dadosabertos.tse.jus.br
