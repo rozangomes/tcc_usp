@@ -62,6 +62,19 @@ de `output/`.
 O significado de cada coluna está em [docs/dicionario_variaveis.md](docs/dicionario_variaveis.md).
 As decisões metodológicas estão em [docs/decisoes.md](docs/decisoes.md).
 
+## Painel público
+
+Versão pública (resultados preliminares) dos gráficos e testes:
+**https://prefeito-presidente-tcc.vercel.app**
+
+O site é a pasta `site/` (uma página HTML que lê `site/data/`, gerada pelo
+script 09). Para publicar de novo depois de rodar os scripts:
+
+```powershell
+cd site
+vercel deploy --prod
+```
+
 ## Fontes de dados
 
 | Dado | Fonte | URL | Data de download |

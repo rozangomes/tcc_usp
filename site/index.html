@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prefeito × Presidente</title>
+<meta name="description" content="Relação entre o voto para presidente e o voto para prefeito nos municípios brasileiros, 1996–2026. Resultados preliminares de TCC (USP).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+  /* Layout: uma coluna de leitura; cartões para cada direção da pergunta */
+  :root {
+    --bg: #f7f7f4; --panel: #fdfdfb; --fg: #16171a; --muted: #5a5b57; --line: #e2e1db;
+    --grid: #ebeae5; --axis: #a9a8a1; --band: #d9d8d0;
+    --c0: #2a78d6; --c1: #eb6834; --ok: #1d7f45; --warn-bg: #fff4d6; --warn-fg: #6b4a00; --warn-line: #f0d48a;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121311; --panel: #1a1b19; --fg: #eeede8; --muted: #b3b2aa; --line: #2e2f2b;
+      --grid: #262724; --axis: #5f5e58; --band: #3a3b36;
+      --c0: #3987e5; --c1: #d95926; --ok: #4cc27a; --warn-bg: #2e2612; --warn-fg: #f2d58c; --warn-line: #5a4a1d;
+      color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans); }
+  .wrap { max-width: 1100px; margin: 0 auto; padding-block: 32px 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; flex-direction: column; gap: 28px; }
+  .aviso { background: var(--warn-bg); color: var(--warn-fg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 10px 14px; font-size: 13.5px; }
+  .aviso strong { font-weight: 600; }
+  header { display: flex; flex-direction: column; gap: 10px; max-width: 74ch; }
+  h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(30px, 5vw, 44px); line-height: 1.1; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .lead { margin: 0; font-size: 17px; }
+  .lead b { font-variant-numeric: tabular-nums; }
+  .meta { margin: 0; color: var(--muted); font-size: 13px; }
+  .filtro { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .filtro label { font-size: 13px; color: var(--muted); }
+  select { font: inherit; font-size: 14px; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; }
+  select:focus-visible, summary:focus-visible { outline: 2px solid var(--c0); outline-offset: 2px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  h2 { font-size: 18px; font-weight: 600; margin: 0; text-wrap: balance; }
+  .sub { margin: 0; color: var(--muted); font-size: 13px; max-width: 82ch; }
+  .legenda { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted); }
+  .legenda span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .faixa { width: 14px; height: 10px; display: inline-block; background: var(--band); border-radius: 2px; }
+  .chart { position: relative; min-height: 360px; min-width: 0; }
+  .chart svg { display: block; width: 100%; overflow: visible; }
+  .chart text { fill: var(--muted); font: 12px var(--sans); }
+  .chart text.forte { fill: var(--fg); }
+  .multi { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; min-height: 320px; }
+  .mini { position: relative; min-width: 0; }
+  .mini h3 { margin: 0 0 4px; font-size: 14px; font-weight: 600; }
+  .tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 4px 16px rgba(0,0,0,.12); border-radius: 6px; padding: 6px 8px; font-size: 12px; line-height: 1.45; white-space: nowrap; z-index: 2; }
+  .tip .m { color: var(--muted); }
+  .dois { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 20px; }
+  .rolagem { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  th { text-align: left; font-weight: 500; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .n { text-align: right; }
+  .chip { display: inline-block; padding: 0 6px; border-radius: 999px; font-size: 11px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .chip.sig { border-color: var(--ok); color: var(--ok); }
+  .erro { color: #c0392b; font-size: 13px; }
+  details summary { cursor: pointer; font-weight: 500; }
+  details ul { margin: 10px 0 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; max-width: 82ch; color: var(--muted); font-size: 13.5px; }
+  footer { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 14px; }
+  a { color: var(--c0); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="aviso" role="note"><strong>Resultados preliminares.</strong> Este painel faz parte de um TCC em andamento e ainda não passou pela revisão do orientador. Os totais de 2026 e as datas de fusão de partidos ainda serão conferidos. Os números mostram associação entre os votos, não causa.</p>
+
+  <header>
+    <h1>Prefeito × Presidente</h1>
+    <p class="lead">Em <b id="pos">—</b> de <b id="tot">—</b> candidaturas a presidente analisadas, o candidato teve votação média maior nos municípios governados pelo seu partido. Na direção inversa, o partido do presidente eleito teve, nas eleições municipais seguintes, uma diferença de <b id="coefb">—</b> pontos no voto para prefeito em relação a ele mesmo fora da Presidência.</p>
+    <p class="meta">Todos os municípios do Brasil, 1996–2026, dados do TSE. TCC de Rozan Gomes (pós-graduação em Marketing Político e Campanhas Eleitorais, USP), orientação do Prof. Lucas Damasceno.</p>
+  </header>
+
+  <div class="filtro">
+    <label for="recorte">Recorte dos municípios</label>
+    <select id="recorte">
+      <option value="Brasil">Brasil (todos)</option>
+      <option value="Capitais">Capitais</option>
+      <option value="Não capitais">Não capitais</option>
+      <option value="Norte">Norte</option>
+      <option value="Nordeste">Nordeste</option>
+      <option value="Centro-Oeste">Centro-Oeste</option>
+      <option value="Sudeste">Sudeste</option>
+      <option value="Sul">Sul</option>
+    </select>
+  </div>
+
+  <section class="card" id="prefeito-presidente">
+    <h2>Prefeito → presidente: voto no candidato conforme o partido do prefeito</h2>
+    <p class="sub">Para cada candidato a presidente, o % médio de votos válidos (1º turno) nos municípios cujo prefeito, eleito dois anos antes, é do partido dele, comparado com os demais municípios. O número à direita é a diferença em pontos. Entram candidatos de partidos com pelo menos 30 prefeitos e média de pelo menos 5% dos votos.</p>
+    <div class="legenda">
+      <span><i class="dot" style="background: var(--c0)"></i>Prefeito de outro partido</span>
+      <span><i class="dot" style="background: var(--c1)"></i>Prefeito do partido do candidato</span>
+    </div>
+    <div class="chart" id="chartA"></div>
+  </section>
+
+  <section class="card" id="presidente-prefeito">
+    <h2>Presidente → prefeito: prefeituras conquistadas por partido</h2>
+    <p class="sub">% das prefeituras do recorte conquistadas por cada partido em cada eleição municipal. PSL e DEM formaram o União Brasil em 2022; PR voltou a se chamar PL em 2019; as séries juntam os nomes antigos.</p>
+    <div class="legenda"><span><i class="faixa"></i>Eleição municipal dois anos depois de o partido eleger o presidente</span></div>
+    <div class="multi" id="chartB"></div>
+  </section>
+
+  <div class="dois">
+    <section class="card" id="correlacoes">
+      <h2>Correlações entre os municípios</h2>
+      <p class="sub">Correlação de Pearson, de −1 a +1. Direção A: % do partido para prefeito em t × % do candidato do partido a presidente em t+2. Direção B: % do presidente eleito em t × % do partido dele para prefeito em t+2. Perto de 0 indica pouca relação.</p>
+      <div class="rolagem"><table>
+        <thead><tr><th>Direção</th><th class="n">Origem</th><th class="n">Destino</th><th>Partido</th><th>Candidato</th><th class="n">Correlação</th></tr></thead>
+        <tbody id="tabCor"></tbody>
+      </table></div>
+    </section>
+    <section class="card" id="regressoes">
+      <h2>Regressões simples</h2>
+      <p class="sub">Mínimos quadrados ordinários, erros-padrão agrupados por município. A: efeito fixo de candidato × UF. B: efeito fixo de partido × UF e de ano. Os modelos 2 incluem o % do partido na eleição anterior do mesmo cargo. Coeficientes em pontos percentuais (em "elegeu o prefeito", em proporção).</p>
+      <div class="rolagem"><table>
+        <thead><tr><th>Modelo</th><th>Resposta</th><th>Termo</th><th class="n">Coef.</th><th class="n">IC 95%</th><th class="n">p</th><th class="n">N</th></tr></thead>
+        <tbody id="tabReg"></tbody>
+      </table></div>
+    </section>
+  </div>
+
+  <details class="card" id="notas">
+    <summary>Como os números foram calculados</summary>
+    <ul>
+      <li>Pareamento: prefeito eleito em t × presidente em t+2 (1996→1998 … 2024→2026), e presidente eleito em t × eleição municipal em t+2 (1994→1996 … 2022→2024).</li>
+      <li>Unidade de análise: o partido. Renomeações juntam siglas (PMDB/MDB, PFL/DEM). Fusões só valem depois de ocorrerem: um prefeito do PSL eleito em 2020 conta como União Brasil em 2022.</li>
+      <li>Prefeito eleito: o da eleição ordinária; se ela não teve eleito, o da primeira suplementar.</li>
+      <li>Em 2016 quem governava era Temer (MDB), e em 2020 Bolsonaro já tinha deixado o PSL; o painel segue o partido do presidente eleito.</li>
+      <li>Médias simples entre municípios, sem peso por eleitorado. Nas capitais há poucos casos por candidato.</li>
+      <li>Fonte: TSE, Portal de Dados Abertos (dadosabertos.tse.jus.br).</li>
+    </ul>
+  </details>
+
+  <footer>Código, dados e registro de decisões: <a href="https://github.com/rozangomes/tcc_usp">github.com/rozangomes/tcc_usp</a>. Dados, código e gráficos feitos com auxílio de IA generativa (Claude), sob supervisão do autor.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+  // ---------------------------------------------------------------------
+  // Painel público. Lê as tabelas de data/ (geradas por src/09_dados_dashboard.py)
+  // ---------------------------------------------------------------------
+  const num = (v) => (v === null || v === undefined || v === '' ? NaN : +v);
+  const fmt = (v, casas = 1) => isNaN(v) ? '—' : v.toLocaleString('pt-BR', {minimumFractionDigits: casas, maximumFractionDigits: casas});
+  const sinal = (v, casas = 1) => isNaN(v) ? '—' : (v > 0 ? '+' : '') + fmt(v, casas);
+  const cor = (nome) => getComputedStyle(document.documentElement).getPropertyValue(nome).trim();
+  let dados = null;
+  let recorte = 'Brasil';
+
+  Promise.all(['prefeito_presidente', 'prefeituras_partido', 'correlacoes', 'regressoes']
+    .map((n) => d3.csv(`data/${n}.csv`)))
+    .then(([pp, pf, cr, rg]) => { dados = {pp, pf, cr, rg}; resumo(); tabelas(); graficos(); })
+    .catch(() => document.querySelectorAll('.chart, .multi').forEach((el) => {
+      el.innerHTML = '<p class="erro">Não foi possível carregar os dados.</p>';
+    }));
+
+  document.getElementById('recorte').addEventListener('change', (e) => { recorte = e.target.value; graficos(); });
+  let larguraAnterior = 0;
+  new ResizeObserver(() => {
+    const w = document.querySelector('.wrap').clientWidth;
+    if (dados && w !== larguraAnterior) { larguraAnterior = w; graficos(); }
+  }).observe(document.querySelector('.wrap'));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => dados && graficos());
+
+  function resumo() {
+    const br = dados.pp.filter((r) => r.recorte === 'Brasil');
+    document.getElementById('pos').textContent = br.filter((r) => +r.diferenca > 0).length;
+    document.getElementById('tot').textContent = br.length;
+    const b = dados.rg.find((r) => r.modelo === 'B1' && r.variavel_resposta === 'pct_prefeito_1t' && r.termo === 'partido_do_presidente');
+    document.getElementById('coefb').textContent = b ? sinal(+b.coeficiente) : '—';
+  }
+
+  function graficos() { graficoA(); graficoB(); }
+
+  function dica(container) {
+    return d3.select(container).append('div').attr('class', 'tip').style('display', 'none');
+  }
+
+  // Gráfico A: halteres (outro partido × mesmo partido) por candidato
+  function graficoA() {
+    const el = document.getElementById('chartA');
+    el.replaceChildren();
+    const rows = dados.pp.filter((r) => r.recorte === recorte)
+      .map((r) => ({...r, ano: +r.ano_presidente, a: num(r.pct_outros), b: num(r.pct_mesmo_partido), dif: num(r.diferenca), n: +r.n_prefeitos}))
+      .sort((x, y) => x.ano - y.ano || (y.b || 0) - (x.b || 0));
+    const W = el.clientWidth || 600, rowH = 26, top = 8, bottom = 34;
+    const H = top + rows.length * rowH + bottom;
+    const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H)
+      .attr('role', 'img').attr('aria-label', `Voto médio de cada candidato a presidente onde o prefeito é do seu partido e nos demais municípios, recorte ${recorte}`);
+    const lab = svg.append('g');
+    rows.forEach((r, i) => lab.append('text').attr('x', 0).attr('y', top + i * rowH + rowH / 2).attr('dy', '0.35em')
+      .attr('class', 'forte').text(`${r.ano}  ${r.candidato} (${r.partido})`));
+    const larg = d3.max(lab.selectAll('text').nodes(), (n) => n.getComputedTextLength()) || 120;
+    const estreito = W < 520;
+    const left = estreito ? 0 : larg + 12, right = 52;
+    if (estreito) lab.selectAll('text').attr('y', (_, i) => top + i * rowH + 4).attr('dy', '0.7em').style('font-size', '11px');
+    const x = d3.scaleLinear().domain([0, 80]).range([left, W - right]);
+    const yOf = (i) => top + i * rowH + (estreito ? 19 : rowH / 2);
+    const ticks = x.ticks(W < 500 ? 4 : 8);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', x).attr('x2', x)
+      .attr('y1', top).attr('y2', H - bottom + 6).style('stroke', cor('--grid'));
+    svg.append('g').attr('transform', `translate(0,${H - bottom + 6})`)
+      .call(d3.axisBottom(x).tickValues(ticks).tickFormat((v) => v + '%').tickSizeOuter(0))
+      .call((a) => a.selectAll('.domain, line').style('stroke', cor('--axis')));
+    rows.forEach((r, i) => { if (i && r.ano !== rows[i - 1].ano) svg.append('line').attr('x1', 0).attr('x2', W).attr('y1', top + i * rowH).attr('y2', top + i * rowH).style('stroke', cor('--grid')); });
+    const tip = dica(el);
+    rows.forEach((r, i) => {
+      const y = yOf(i), g = svg.append('g');
+      if (!isNaN(r.b)) g.append('line').attr('x1', x(r.a)).attr('x2', x(r.b)).attr('y1', y).attr('y2', y).style('stroke', cor('--axis')).style('stroke-width', 2);
+      g.append('circle').attr('cx', x(r.a)).attr('cy', y).attr('r', 5).style('fill', cor('--c0')).style('stroke', cor('--panel')).style('stroke-width', 2);
+      if (!isNaN(r.b)) g.append('circle').attr('cx', x(r.b)).attr('cy', y).attr('r', 5).style('fill', cor('--c1')).style('stroke', cor('--panel')).style('stroke-width', 2);
+      g.append('text').attr('x', W).attr('y', y).attr('dy', '0.35em').attr('text-anchor', 'end').attr('class', 'forte')
+        .text(isNaN(r.dif) ? 'sem caso' : sinal(r.dif));
+      g.append('rect').attr('x', 0).attr('y', top + i * rowH).attr('width', W).attr('height', rowH).style('fill', 'transparent')
+        .on('pointermove', (ev) => {
+          const [mx, my] = d3.pointer(ev, el);
+          tip.style('display', null).html('');
+          tip.append('div').text(`${r.ano} · ${r.candidato} (${r.partido})`);
+          tip.append('div').attr('class', 'm').text(`Prefeito do partido: ${fmt(r.b)}% (${r.n} municípios)`);
+          tip.append('div').attr('class', 'm').text(`Outros municípios: ${fmt(r.a)}%`);
+          tip.append('div').text(`Diferença: ${isNaN(r.dif) ? '—' : sinal(r.dif) + ' pontos'}`);
+          const tw = tip.node().offsetWidth;
+          tip.style('left', Math.max(0, Math.min(mx + 12, el.clientWidth - tw)) + 'px').style('top', (my + 14) + 'px');
+        })
+        .on('pointerleave', () => tip.style('display', 'none'));
+    });
+  }
+
+  // Gráfico B: pequenos múltiplos, um por partido
+  function graficoB() {
+    const el = document.getElementById('chartB');
+    el.replaceChildren();
+    const rows = dados.pf.filter((r) => r.recorte === recorte)
+      .map((r) => ({...r, ano: +r.ano_municipal, v: +r.pct_prefeituras, pres: +r.partido_do_presidente === 1}));
+    const ordem = ['PT', 'PSDB', 'PSL', 'MDB', 'PP', 'DEM', 'PSD', 'PL', 'UNIÃO', 'PSB'];
+    const y0 = d3.scaleLinear().domain([0, Math.max(5, d3.max(rows, (r) => r.v) || 0)]).nice();
+    ordem.forEach((part) => {
+      const serie = rows.filter((r) => r.partido === part).sort((a, b) => a.ano - b.ano);
+      if (!serie.length) return;
+      const box = d3.select(el).append('div').attr('class', 'mini');
+      box.append('h3').text(part);
+      const W = box.node().clientWidth || 200, H = 130, m = {t: 8, r: 38, b: 20, l: 32};
+      const x = d3.scaleLinear().domain([1994, 2026]).range([m.l, W - m.r]);
+      const y = y0.copy().range([H - m.b, m.t]);
+      const svg = box.append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H)
+        .attr('role', 'img').attr('aria-label', `% das prefeituras conquistadas pelo ${part}, 1996 a 2024, recorte ${recorte}`);
+      serie.filter((r) => r.pres).forEach((r) => svg.append('rect').attr('x', x(r.ano - 2)).attr('width', x(r.ano + 2) - x(r.ano - 2))
+        .attr('y', m.t).attr('height', H - m.b - m.t).style('fill', cor('--band')));
+      svg.append('g').selectAll('line').data(y.ticks(3)).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y).style('stroke', cor('--grid'));
+      svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(3).tickSize(0).tickFormat((v) => v + '%'))
+        .call((a) => a.select('.domain').remove());
+      svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues([1996, 2008, 2020]).tickFormat(d3.format('d')).tickSizeOuter(0))
+        .call((a) => a.selectAll('.domain, line').style('stroke', cor('--axis')));
+      svg.append('path').datum(serie).attr('d', d3.line().x((r) => x(r.ano)).y((r) => y(r.v)))
+        .style('fill', 'none').style('stroke', cor('--c0')).style('stroke-width', 2);
+      svg.selectAll('circle').data(serie).join('circle').attr('cx', (r) => x(r.ano)).attr('cy', (r) => y(r.v)).attr('r', 4)
+        .style('fill', cor('--c0')).style('stroke', cor('--panel')).style('stroke-width', 1.5);
+      const ult = serie[serie.length - 1];
+      svg.append('text').attr('x', x(ult.ano) + 6).attr('y', y(ult.v)).attr('dy', '0.35em').attr('class', 'forte').text(fmt(ult.v) + '%');
+      const tip = dica(box.node());
+      svg.append('rect').attr('x', m.l).attr('y', 0).attr('width', W - m.l - m.r).attr('height', H).style('fill', 'transparent')
+        .on('pointermove', (ev) => {
+          const [mx] = d3.pointer(ev);
+          const ano = x.invert(mx);
+          const r = serie.reduce((a, b) => Math.abs(b.ano - ano) < Math.abs(a.ano - ano) ? b : a);
+          tip.style('display', null).html('');
+          tip.append('div').text(`${part} · ${r.ano}`);
+          tip.append('div').attr('class', 'm').text(`${fmt(r.v)}% das prefeituras (${(+r.prefeituras).toLocaleString('pt-BR')} de ${(+r.municipios).toLocaleString('pt-BR')})`);
+          tip.append('div').attr('class', 'm').text(`Presidente eleito em ${r.ano - 2}: ${r.partido_presidente_eleito}`);
+          const tw = tip.node().offsetWidth;
+          tip.style('left', Math.max(0, Math.min(x(r.ano) - tw / 2, W - tw)) + 'px').style('top', (y(r.v) + 30) + 'px');
+        })
+        .on('pointerleave', () => tip.style('display', 'none'));
+    });
+  }
+
+  // Tabelas de correlações e regressões
+  const termos = {
+    mesmo_partido: 'Prefeito do mesmo partido', mesmo_x_capital: '… × capital', mesmo_x_recente: '… × ciclos recentes (2022, 2026)',
+    pct_presidente_eleicao_anterior: '% do partido na presidencial anterior',
+    partido_do_presidente: 'Partido do presidente', pres_x_capital: '… × capital', pres_x_recente: '… × ciclo recente (2024)',
+    pct_prefeito_eleicao_anterior: '% do partido na municipal anterior',
+  };
+  const respostas = {pct_votos_presidente: '% para presidente', pct_prefeito_1t: '% para prefeito', elegeu_prefeito: 'Elegeu o prefeito'};
+
+  function tabelas() {
+    const tc = document.getElementById('tabCor');
+    dados.cr.forEach((r) => {
+      const tr = tc.insertRow(), c = +r.correlacao;
+      [r.direcao.slice(0, 1), r.ano_origem, r.ano_destino, r.partido, r.candidato, fmt(c, 2)].forEach((v, i) => {
+        const td = tr.insertCell(); td.textContent = v; if ([1, 2, 5].includes(i)) td.className = 'n';
+      });
+      const w = Math.min(100, Math.abs(c) / 0.4 * 100);
+      tr.cells[5].style.background = `linear-gradient(to left, color-mix(in srgb, var(--c0) 22%, transparent) ${w}%, transparent ${w}%)`;
+    });
+    const tr2 = document.getElementById('tabReg');
+    dados.rg.forEach((r) => {
+      const tr = tr2.insertRow(), casas = r.variavel_resposta === 'elegeu_prefeito' ? 3 : 2, p = +r.p_valor;
+      [r.modelo, respostas[r.variavel_resposta] || r.variavel_resposta, termos[r.termo] || r.termo, sinal(+r.coeficiente, casas),
+        `${fmt(+r.ic95_inf, casas)} a ${fmt(+r.ic95_sup, casas)}`, null, (+r.n_obs).toLocaleString('pt-BR')].forEach((v, i) => {
+        const td = tr.insertCell();
+        if (i >= 3) td.className = 'n';
+        if (i === 5) {
+          td.textContent = (p < 0.001 ? '<0,001' : fmt(p, 3)) + ' ';
+          const chip = document.createElement('span');
+          chip.className = 'chip' + (p < 0.05 ? ' sig' : '');
+          chip.textContent = p < 0.05 ? 'sig.' : 'n.s.';
+          td.append(chip);
+        } else td.textContent = v;
+      });
+    });
+  }
+</script>
+</body>
+</html>

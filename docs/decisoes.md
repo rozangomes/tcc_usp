@@ -380,6 +380,17 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
   Brasil (D29); por isso alguns candidatos têm poucos ou nenhum prefeito do
   partido no recorte.
 
+### D33. Painel público na Vercel
+- **Decisão do aluno (25/11/2026):** publicar uma versão pública do painel,
+  marcada como **resultados preliminares**, em
+  https://prefeito-presidente-tcc.vercel.app (projeto
+  `prefeito-presidente-tcc` na conta Vercel do aluno).
+- É uma página independente (`site/index.html`, com a biblioteca d3), que
+  lê as mesmas tabelas resumidas do dashboard (cópia em `site/data/`, feita
+  pelo script 09). Não contém os bancos completos.
+- O aviso de resultados preliminares deve sair só depois da revisão do
+  orientador e das conferências pendentes (totais de 2026, datas de fusão).
+
 ---
 
 ## Observações sobre a qualidade dos dados (25/11/2026)

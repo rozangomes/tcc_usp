@@ -194,7 +194,7 @@ conda-meta/
 .ropeproject
 
 # mkdocs/Zensical documentation
-/site
+# /site  (desativado: a pasta site/ é o painel público do TCC e vai para o Git)
 
 # mypy
 .mypy_cache/

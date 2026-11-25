@@ -8,7 +8,8 @@ Gera as tabelas resumidas (pequenas) que alimentam o dashboard interativo
 do projeto. O dashboard não lê os painéis inteiros (centenas de milhares de
 linhas): lê só estes resumos, já calculados aqui.
 
-SAÍDAS (output/dashboard/, CSV separado por vírgula, ponto decimal)
+SAÍDAS (output/dashboard/ e uma cópia em site/data/, CSV separado por
+vírgula, ponto decimal)
 ------
 - prefeito_presidente.csv  : direção A. Para cada candidato a presidente
   (mesma seleção da D29) e cada recorte (Brasil, capitais, não capitais,
@@ -33,6 +34,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 PASTA = RAIZ / "data" / "processed"
 TAB = RAIZ / "output" / "tabelas"
 SAIDA = RAIZ / "output" / "dashboard"
+SITE = RAIZ / "site" / "data"   # cópia usada pelo site público (Vercel)
 
 MIN_PREFEITOS, MIN_PCT_MEDIO = 30, 5.0  # igual ao script 08 (D29)
 REGIOES = ["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"]
@@ -98,6 +100,10 @@ def main():
     reg = pd.read_csv(TAB / "regressoes.csv", sep=";", decimal=",")
     reg = reg[reg["termo"] != "capital"]
     reg.round(4).to_csv(SAIDA / "regressoes.csv", index=False, encoding="utf-8")
+    # Copia as mesmas tabelas para o site público
+    SITE.mkdir(parents=True, exist_ok=True)
+    for f in SAIDA.glob("*.csv"):
+        (SITE / f.name).write_bytes(f.read_bytes())
     for f in sorted(SAIDA.glob("*.csv")):
         print(f"  {f.name}: {sum(1 for _ in open(f, encoding='utf-8')) - 1} linhas, "
               f"{f.stat().st_size / 1024:.0f} KB")
