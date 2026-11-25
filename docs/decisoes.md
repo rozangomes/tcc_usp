@@ -219,6 +219,68 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Equivalência de partidos
+
+### D23. Duas camadas: linhagem (renomeações) e fusões por data
+- **Linhagem:** siglas que são o mesmo partido com outro nome recebem um
+  único nome, o da sigla mais recente (ex.: PMDB/MDB → MDB; PFL/DEM → DEM;
+  PRN/PTC/AGIR → AGIR; PMB/DEMOCRATA → DEMOCRATA).
+  Tabela manual: `data/manual/partidos_siglas.csv`.
+- **Fusões e incorporações:** só valem para eleições **posteriores** ao
+  evento. Ex.: DEM e PSL → União Brasil a partir de 2022. Em 2018, DEM e PSL
+  continuam sendo partidos diferentes.
+  Tabela manual: `data/manual/partidos_eventos.csv` (15 eventos).
+- **Por quê:** se toda sigla fosse trocada pelo nome atual em todos os anos,
+  um prefeito do DEM eleito em 2016 seria contado como "do mesmo partido"
+  que Bolsonaro (PSL) em 2018, o que é falso.
+- **No pareamento t → t+2:** o partido em *t* é levado à linhagem que ele
+  tinha em *t + 2* (coluna `linhagem_ano_mais_2`). Ex.: prefeito do PSL
+  eleito em 2020 → União Brasil em 2022.
+- **Código:** `src/partidos.py` (funções) e `src/06_tabela_partidos.py`.
+
+### D24. Fontes e conferência das equivalências
+- As renomeações e fusões foram listadas a partir do histórico dos partidos e
+  **conferidas com os próprios dados do TSE**: (i) número do partido;
+  (ii) a sigla absorvida não aparece em nenhuma eleição ordinária depois da
+  fusão (o script 06 testa isso para os 15 eventos).
+- Os casos recentes foram conferidos pelas datas de criação e registro dos
+  partidos: Democrata (nº 35) tem as mesmas datas do PMB, Mobiliza (nº 33) as
+  mesmas do PMN, e o Partido Missão (nº 14) é um partido novo (registro em
+  nov/2025), sem relação com o antigo PTB.
+- **Limitação:** as páginas oficiais de partidos do TSE bloquearam o acesso
+  automático (erro 403). As datas exatas dos eventos devem ser conferidas
+  manualmente em https://www.tse.jus.br/partidos antes da versão final. Para
+  o painel, só importa **entre quais eleições** cada evento ocorreu, e isso
+  está confirmado pelos dados.
+- **Data incerta:** a incorporação do PAN ao PTB (2006 ou 2007). Não afeta os
+  pares com presidente, porque nenhum dos dois teve candidato em 2006.
+
+### D25. Particularidades encontradas nos dados do TSE
+- **Siglas "atualizadas":** nas eleições **suplementares**, o TSE às vezes
+  registra a sigla atual (ex.: "UNIÃO" numa suplementar do ciclo 2020,
+  realizada depois de 2022). Nas eleições ordinárias, as siglas são sempre as
+  da época. A tabela de linhagem trata os dois casos.
+- **Mesma sigla, partidos diferentes:** "PSD" nomeou o PSD de 1987–2003
+  (nº 41, incorporado ao PTB) e o PSD criado em 2011 (nº 55). Distinguidos
+  pelo ano.
+- **Números reaproveitados:** União (44, antigo PRP), PRD (25, antigo DEM),
+  Missão (14, antigo PTB) e Podemos (20, antigo PSC) usam números de partidos
+  extintos. Por isso a ligação é feita pela sigla e pela data, nunca só pelo
+  número.
+- **Federações (2022 em diante)** não são tratadas como fusão: pela D15, a
+  unidade é o partido.
+
+### Observação para a análise (não é decisão)
+- Na direção prefeito → presidente, o número de municípios em que o partido
+  do prefeito teve candidato a presidente dois anos depois varia de 1.174
+  (1996→1998) a 2.547 (2016→2018). Casos que chamam atenção:
+  - 2016→2018: só 31 prefeitos do PSL (partido de Bolsonaro em 2018).
+  - 2020→2022: os prefeitos do PSL e do DEM eleitos em 2020 viram União
+    Brasil em 2022 (candidata Soraya Thronicke), e não PL (Bolsonaro).
+    Isso decorre da D15, que toma o partido como unidade de análise.
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

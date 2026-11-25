@@ -24,10 +24,14 @@ python -m venv .venv
 # 5. Baixar os votos para prefeito (≈ 1 min) e montar o banco
 .venv\Scripts\python src\04_baixar_prefeito.py
 .venv\Scripts\python src\05_montar_prefeito_municipio.py
+
+# 6. Montar e conferir a equivalência de partidos
+.venv\Scripts\python src\06_tabela_partidos.py
 ```
 
 Os dados brutos e processados **não** ficam no Git (são grandes); os scripts
-acima os recriam.
+acima os recriam. As tabelas feitas à mão (`data/manual/`, como a
+equivalência de partidos) ficam no Git.
 
 ## Scripts
 
@@ -38,6 +42,8 @@ acima os recriam.
 | `src/03_tabela_tse_ibge.py` | Monta a correspondência entre código de município do TSE e do IBGE, com regiões geográficas e dummy de capital | `data/processed/municipios_tse_ibge.{parquet,csv}` |
 | `src/04_baixar_prefeito.py` | Baixa do TSE os votos para prefeito por município e zona, 1996–2024 | `data/raw/prefeito/` |
 | `src/05_montar_prefeito_municipio.py` | Banco de votos de prefeito (eleição ordinária) e prefeito eleito por município e ano | `data/processed/prefeito_municipio*.{parquet,csv}` |
+| `src/06_tabela_partidos.py` | Confere as tabelas manuais de partidos contra os dados e gera a equivalência por ano (renomeações e fusões) | `data/processed/partidos_equivalencia.{parquet,csv}` |
+| `src/partidos.py` | Funções de linhagem e sucessão de partidos (usadas pelo 06 e pelo painel) | — |
 | `src/utils_tse.py` | Funções compartilhadas (leitura parcial dos ZIPs do TSE, filtro por cargo, registro de downloads) | — |
 
 O significado de cada coluna está em [docs/dicionario_variaveis.md](docs/dicionario_variaveis.md).

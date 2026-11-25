@@ -92,6 +92,38 @@ Uma linha por **município × ano** de eleição municipal.
 | `partido_eleito_ultima_suplementar` | Partido do vencedor da última suplementar do ciclo |
 | `data_ultima_suplementar` | Data dessa suplementar |
 
+## Tabelas manuais de partidos (`data/manual/`, versionadas no Git)
+
+`partidos_siglas.csv`: uma linha por sigla (e número) de partido.
+
+| Coluna | Significado |
+|---|---|
+| `sg_partido`, `nr_partido` | Sigla e número como aparecem no TSE |
+| `ano_min`, `ano_max` | Anos em que a regra vale (só importa para "PSD", que nomeou dois partidos) |
+| `linhagem` | O partido, juntando renomeações (nome da sigla mais recente) |
+| `nome`, `obs` | Nome do partido e observações |
+
+`partidos_eventos.csv`: uma linha por fusão ou incorporação.
+
+| Coluna | Significado |
+|---|---|
+| `linhagem_origem` | Partido que deixou de existir |
+| `linhagem_destino` | Partido que o absorveu ou que resultou da fusão |
+| `ano_efeito` | Primeira eleição em que a mudança vale |
+| `tipo` | fusão ou incorporação |
+| `quando` | Ano do evento (aproximado quando indicado) |
+
+## `data/processed/partidos_equivalencia` (.parquet / .csv)
+Uma linha por **ano × sigla** que aparece nos bancos de presidente e prefeito.
+
+| Coluna | Significado |
+|---|---|
+| `ano`, `sg_partido` | Eleição e sigla como aparecem nos dados |
+| `linhagem` | O partido naquele ano (renomeações juntadas) |
+| `linhagem_ano_mais_2` | O partido dois anos depois, aplicando fusões (use no pareamento t → t+2) |
+| `linhagem_2026` | O partido equivalente hoje |
+| `origem` | Em quais bancos a sigla aparece naquele ano |
+
 ---
 
 Os arquivos .csv usam `;` como separador e `,` como decimal (padrão do Excel em português).

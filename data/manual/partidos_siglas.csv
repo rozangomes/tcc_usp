@@ -1,0 +1,64 @@
+sg_partido;nr_partido;ano_min;ano_max;linhagem;nome;obs
+PRB;10;1900;2100;REPUBLICANOS;Partido Republicano Brasileiro;Renomeado Republicanos (2019)
+REPUBLICANOS;10;1900;2100;REPUBLICANOS;Republicanos;
+PPR;11;1900;2100;PPR;Partido Progressista Reformador;Fundiu-se com o PP (1993) em 1995, formando o PPB
+PPB;11;1900;2100;PP;Partido Progressista Brasileiro;Renomeado PP (2003)
+PP;11;1900;2100;PP;Progressistas;
+PDT;12;1900;2100;PDT;Partido Democrático Trabalhista;
+PT;13;1900;2100;PT;Partido dos Trabalhadores;
+PTB;14;1900;2100;PTB;Partido Trabalhista Brasileiro;Fundiu-se com o Patriota em 2023, formando o PRD
+MISSÃO;14;1900;2100;MISSÃO;Partido Missão;Partido novo, registrado em 2025, usa o antigo número do PTB, mas não é sucessor dele
+PMDB;15;1900;2100;MDB;Partido do Movimento Democrático Brasileiro;Renomeado MDB (2017)
+MDB;15;1900;2100;MDB;Movimento Democrático Brasileiro;
+PSTU;16;1900;2100;PSTU;Partido Socialista dos Trabalhadores Unificado;
+PSL;17;1900;2100;PSL;Partido Social Liberal;Fundiu-se com o DEM em 2022, formando o União Brasil
+PST;18;1900;2100;PST;Partido Social Trabalhista;Incorporado ao PL (2003)
+REDE;18;1900;2100;REDE;Rede Sustentabilidade;
+PTN;19;1900;2100;PODE;Partido Trabalhista Nacional;Renomeado Podemos (2017)
+PODE;19;1900;2100;PODE;Podemos;
+PODE;20;1900;2100;PODE;Podemos;Passou a usar o número 20 após incorporar o PSC (2023)
+PSC;20;1900;2100;PSC;Partido Social Cristão;Incorporado ao Podemos (2023)
+PCB;21;1900;2100;PCB;Partido Comunista Brasileiro;
+PL;22;1900;2100;PL;Partido Liberal;PL + PRONA formaram o PR (2006), e o PR voltou a se chamar PL (2019)
+PR;22;1900;2100;PL;Partido da República;Renomeado PL (2019)
+PPS;23;1900;2100;CIDADANIA;Partido Popular Socialista;Renomeado Cidadania (2019)
+CIDADANIA;23;1900;2100;CIDADANIA;Cidadania;
+PFL;25;1900;2100;DEM;Partido da Frente Liberal;Renomeado Democratas (2007)
+DEM;25;1900;2100;DEM;Democratas;Fundiu-se com o PSL em 2022, formando o União Brasil
+PRD;25;1900;2100;PRD;Partido Renovação Democrática;Fusão de PTB e Patriota (2023), usa o antigo número do DEM, mas não é sucessor dele
+PAN;26;1900;2100;PAN;Partido dos Aposentados da Nação;Incorporado ao PTB (data a confirmar: entre 2006 e 2007)
+PSDC;27;1900;2100;DC;Partido Social Democrata Cristão;Renomeado Democracia Cristã (2017)
+DC;27;1900;2100;DC;Democracia Cristã;
+PRTB;28;1900;2100;PRTB;Partido Renovador Trabalhista Brasileiro;
+PCO;29;1900;2100;PCO;Partido da Causa Operária;
+PGT;30;1900;2100;PGT;Partido Geral dos Trabalhadores;Incorporado ao PL (2003)
+NOVO;30;1900;2100;NOVO;Partido Novo;
+PSN;31;1900;2100;PHS;Partido da Solidariedade Nacional;Renomeado PHS (c. 2000)
+PHS;31;1900;2100;PHS;Partido Humanista da Solidariedade;Incorporado ao Podemos (2019)
+PMN;33;1900;2100;MOBILIZA;Partido da Mobilização Nacional;Renomeado Mobilização Nacional (sigla MOBILIZA)
+MOBILIZA;33;1900;2100;MOBILIZA;Mobilização Nacional;
+PMB;35;1900;2100;DEMOCRATA;Partido da Mulher Brasileira;Renomeado Democrata (mesmo número e mesmas datas de criação e registro)
+DEMOCRATA;35;1900;2100;DEMOCRATA;Democrata;
+PRN;36;1900;2100;AGIR;Partido da Reconstrução Nacional;Renomeado PTC (2000) e depois Agir (2022)
+PTC;36;1900;2100;AGIR;Partido Trabalhista Cristão;Renomeado Agir (2022)
+AGIR;36;1900;2100;AGIR;Agir;
+PSB;40;1900;2100;PSB;Partido Socialista Brasileiro;
+PSD;41;1900;2003;PSD (1987-2003);Partido Social Democrático (antigo);Incorporado ao PTB (2003). Não tem relação com o PSD de 2011
+PV;43;1900;2100;PV;Partido Verde;
+PRP;44;1900;2100;PRP;Partido Republicano Progressista;Incorporado ao Patriota (2019)
+UNIÃO;44;1900;2100;UNIÃO;União Brasil;Fusão de DEM e PSL (2022), usa o antigo número do PRP, mas não é sucessor dele
+PSDB;45;1900;2100;PSDB;Partido da Social Democracia Brasileira;
+PSOL;50;1900;2100;PSOL;Partido Socialismo e Liberdade;
+PEN;51;1900;2100;PATRIOTA;Partido Ecológico Nacional;Renomeado Patriota (2018)
+PATRI;51;1900;2100;PATRIOTA;Patriota;Sigla usada pelo TSE em 2016-2018
+PATRIOTA;51;1900;2100;PATRIOTA;Patriota;Fundiu-se com o PTB em 2023, formando o PRD
+PPL;54;1900;2100;PPL;Partido Pátria Livre;Incorporado ao PCdoB (2019)
+PSD;55;2004;2100;PSD;Partido Social Democrático (2011);Criado em 2011
+PRONA;56;1900;2100;PRONA;Partido de Reedificação da Ordem Nacional;Fundiu-se com o PL em 2006, formando o PR
+PC do B;65;1900;2100;PC do B;Partido Comunista do Brasil;
+PT do B;70;1900;2100;AVANTE;Partido Trabalhista do Brasil;Renomeado Avante (2017)
+AVANTE;70;1900;2100;AVANTE;Avante;
+SD;77;1900;2100;SOLIDARIEDADE;Solidariedade;
+SOLIDARIEDADE;77;1900;2100;SOLIDARIEDADE;Solidariedade;
+UP;80;1900;2100;UP;Unidade Popular;
+PROS;90;1900;2100;PROS;Partido Republicano da Ordem Social;Incorporado ao Solidariedade (2023)
