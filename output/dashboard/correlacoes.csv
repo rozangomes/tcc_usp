@@ -1,0 +1,32 @@
+direcao,ano_origem,ano_destino,partido,candidato,n_municipios,correlacao
+A: prefeito t -> presidente t+2,1996,1998,CIDADANIA,CIRO GOMES,5407,0.079
+A: prefeito t -> presidente t+2,1996,1998,PSDB,FERNANDO HENRIQUE,5407,0.062
+A: prefeito t -> presidente t+2,1996,1998,PT,LULA,5407,0.256
+A: prefeito t -> presidente t+2,2000,2002,CIDADANIA,CIRO,5555,0.149
+A: prefeito t -> presidente t+2,2000,2002,PSB,GAROTINHO,5555,0.142
+A: prefeito t -> presidente t+2,2000,2002,PSDB,JOSÉ SERRA,5555,0.08
+A: prefeito t -> presidente t+2,2000,2002,PT,LULA,5555,0.191
+A: prefeito t -> presidente t+2,2004,2006,PSDB,GERALDO ALCKMIN,5560,0.068
+A: prefeito t -> presidente t+2,2004,2006,PT,LULA,5560,-0.091
+A: prefeito t -> presidente t+2,2008,2010,PT,DILMA,5557,-0.038
+A: prefeito t -> presidente t+2,2008,2010,PSDB,JOSÉ SERRA,5557,0.122
+A: prefeito t -> presidente t+2,2008,2010,PV,MARINA SILVA,5557,0.113
+A: prefeito t -> presidente t+2,2012,2014,PSDB,AÉCIO NEVES,5568,0.177
+A: prefeito t -> presidente t+2,2012,2014,PT,DILMA,5568,-0.022
+A: prefeito t -> presidente t+2,2012,2014,PSB,MARINA SILVA,5568,0.163
+A: prefeito t -> presidente t+2,2016,2018,PDT,CIRO GOMES,5561,0.197
+A: prefeito t -> presidente t+2,2016,2018,PT,FERNANDO HADDAD,5561,0.111
+A: prefeito t -> presidente t+2,2016,2018,PSDB,GERALDO ALCKMIN,5561,0.238
+A: prefeito t -> presidente t+2,2016,2018,PSL,JAIR BOLSONARO,5561,-0.077
+A: prefeito t -> presidente t+2,2020,2022,PL,JAIR BOLSONARO,5564,-0.053
+A: prefeito t -> presidente t+2,2020,2022,PT,LULA,5564,0.138
+A: prefeito t -> presidente t+2,2024,2026,PL,FLAVIO BOLSONARO,5555,0.298
+A: prefeito t -> presidente t+2,2024,2026,PT,LULA,5555,0.251
+B: presidente t -> prefeito t+2,1994,1996,PSDB,FERNANDO HENRIQUE CARDOSO,4947,0.185
+B: presidente t -> prefeito t+2,1998,2000,PSDB,FERNANDO HENRIQUE,5507,0.118
+B: presidente t -> prefeito t+2,2002,2004,PT,LULA,5560,0.183
+B: presidente t -> prefeito t+2,2006,2008,PT,LULA,5562,0.001
+B: presidente t -> prefeito t+2,2010,2012,PT,DILMA,5565,-0.009
+B: presidente t -> prefeito t+2,2014,2016,PT,DILMA,5565,0.131
+B: presidente t -> prefeito t+2,2018,2020,PSL,JAIR BOLSONARO,5567,0.133
+B: presidente t -> prefeito t+2,2022,2024,PT,LULA,5560,0.251

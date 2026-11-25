@@ -369,6 +369,17 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 - Gráficos e tabelas ficam em `output/` e **vão para o Git** (são pequenos e
   o orientador pode vê-los direto no GitHub).
 
+### D32. Dashboard interativo
+- Um dashboard no Claude (artefato privado do aluno) mostra os dois
+  gráficos com filtro de recorte (Brasil, capitais, não capitais e cada
+  região), as correlações e as regressões.
+- Ele lê só as tabelas resumidas de `output/dashboard/` (script 09), não os
+  bancos completos. Quando os scripts 07 a 09 forem rodados de novo, os
+  arquivos do dashboard precisam ser enviados de novo.
+- Nos recortes por região e capital, a seleção de candidatos é a mesma do
+  Brasil (D29); por isso alguns candidatos têm poucos ou nenhum prefeito do
+  partido no recorte.
+
 ---
 
 ## Observações sobre a qualidade dos dados (25/11/2026)

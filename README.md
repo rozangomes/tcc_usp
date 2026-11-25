@@ -33,6 +33,9 @@ python -m venv .venv
 
 # 8. Primeiros gráficos, correlações e regressões simples
 .venv\Scripts\python src\08_analise_inicial.py
+
+# 9. Tabelas resumidas que alimentam o dashboard interativo
+.venv\Scripts\python src\09_dados_dashboard.py
 ```
 
 Os dados brutos e processados **não** ficam no Git (são grandes); os scripts
@@ -52,6 +55,7 @@ de `output/`.
 | `src/06_tabela_partidos.py` | Confere as tabelas manuais de partidos contra os dados e gera a equivalência por ano (renomeações e fusões) | `data/processed/partidos_equivalencia.{parquet,csv}` |
 | `src/07_montar_painel.py` | Junta presidente e prefeito nos dois painéis do pareamento t → t+2, por partido | `data/processed/painel_*.{parquet,csv}` |
 | `src/08_analise_inicial.py` | Gráficos, correlações e regressões simples (com dummy de capital) dos dois painéis | `output/figuras/`, `output/tabelas/` |
+| `src/09_dados_dashboard.py` | Resume os painéis e os resultados do 08 em tabelas pequenas para o dashboard (por recorte: Brasil, capitais, não capitais e regiões) | `output/dashboard/` |
 | `src/partidos.py` | Funções de linhagem e sucessão de partidos (usadas pelo 06 e pelo painel) | — |
 | `src/utils_tse.py` | Funções compartilhadas (leitura parcial dos ZIPs do TSE, filtro por cargo, registro de downloads) | — |
 
