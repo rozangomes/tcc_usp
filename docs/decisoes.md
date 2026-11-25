@@ -332,6 +332,45 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Primeiros gráficos e testes simples
+
+### D29. Candidatos incluídos na direção A
+- Entram os candidatos a presidente cujo partido elegeu **pelo menos 30
+  prefeitos** em *t* e que tiveram **média de pelo menos 5%** dos votos nos
+  municípios em *t + 2* (23 candidatos, 1998–2026).
+- **Por quê:** com poucos prefeitos, a média oscila muito; candidatos com
+  menos de 5% quase não variam entre municípios.
+- **Atenção:** Bolsonaro 2018 entra com só 31 prefeitos do PSL.
+
+### D30. Especificação das regressões simples
+- **Método:** mínimos quadrados ordinários (MQO), com erros-padrão agrupados
+  por município (o mesmo município aparece em vários anos e várias linhas).
+- **Modelo A:** % do candidato a presidente no município ~ `mesmo_partido`
+  + `mesmo_partido × capital` + `mesmo_partido × recente` + capital, com
+  efeito fixo de candidato × UF (cada candidato é comparado com ele mesmo
+  dentro da mesma UF). **A2** acrescenta o % do partido na eleição
+  presidencial anterior (D27); por isso perde os candidatos cujo partido não
+  disputou a Presidência quatro anos antes.
+- **Modelo B:** % do partido para prefeito no 1º turno (e, à parte,
+  "elegeu o prefeito", 0/1) ~ `partido_do_presidente` + interações com
+  capital e com ciclo recente + capital, com efeito fixo de partido × UF e de
+  ano. **B2** acrescenta o % do partido na eleição municipal anterior e, por
+  isso, perde 1996.
+- **Ciclos recentes:** 2022 e 2026 para presidente (modelo A) e 2024 para
+  prefeito (modelo B), seguindo a hipótese secundária do CLAUDE.md.
+- **Limites:** são testes iniciais, sem renda per capita e sem controles do
+  contexto de cada eleição. No modelo B, a variação vem de poucos partidos
+  (PSDB, PT e PSL). Os resultados mostram associação, não causalidade.
+- **Código:** `src/08_analise_inicial.py`.
+
+### D31. Gráficos
+- Cores da paleta de referência (validada para daltonismo): azul `#2a78d6`
+  e laranja `#eb6834`. Os gráficos não usam o termo "polarização" (D17).
+- Gráficos e tabelas ficam em `output/` e **vão para o Git** (são pequenos e
+  o orientador pode vê-los direto no GitHub).
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.

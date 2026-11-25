@@ -30,11 +30,15 @@ python -m venv .venv
 
 # 7. Montar os dois painéis (prefeito -> presidente e presidente -> prefeito)
 .venv\Scripts\python src\07_montar_painel.py
+
+# 8. Primeiros gráficos, correlações e regressões simples
+.venv\Scripts\python src\08_analise_inicial.py
 ```
 
 Os dados brutos e processados **não** ficam no Git (são grandes); os scripts
 acima os recriam. As tabelas feitas à mão (`data/manual/`, como a
-equivalência de partidos) ficam no Git.
+equivalência de partidos) ficam no Git, assim como os gráficos e as tabelas
+de `output/`.
 
 ## Scripts
 
@@ -47,6 +51,7 @@ equivalência de partidos) ficam no Git.
 | `src/05_montar_prefeito_municipio.py` | Banco de votos de prefeito (eleição ordinária) e prefeito eleito por município e ano | `data/processed/prefeito_municipio*.{parquet,csv}` |
 | `src/06_tabela_partidos.py` | Confere as tabelas manuais de partidos contra os dados e gera a equivalência por ano (renomeações e fusões) | `data/processed/partidos_equivalencia.{parquet,csv}` |
 | `src/07_montar_painel.py` | Junta presidente e prefeito nos dois painéis do pareamento t → t+2, por partido | `data/processed/painel_*.{parquet,csv}` |
+| `src/08_analise_inicial.py` | Gráficos, correlações e regressões simples (com dummy de capital) dos dois painéis | `output/figuras/`, `output/tabelas/` |
 | `src/partidos.py` | Funções de linhagem e sucessão de partidos (usadas pelo 06 e pelo painel) | — |
 | `src/utils_tse.py` | Funções compartilhadas (leitura parcial dos ZIPs do TSE, filtro por cargo, registro de downloads) | — |
 
