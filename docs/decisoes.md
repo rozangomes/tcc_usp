@@ -281,6 +281,57 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 
 ---
 
+## 25/11/2026 — Montagem do painel
+
+### D26. Dois painéis, um para cada direção da pergunta
+- **Painel A (prefeito → presidente):** uma linha por município × par de
+  eleições × candidato a presidente no 1º turno de *t + 2*. A variável-chave
+  `mesmo_partido` vale 1 quando o candidato é do partido do prefeito eleito
+  em *t*. O partido do prefeito é levado a *t + 2* com as fusões (D23).
+- **Painel B (presidente → prefeito):** uma linha por município × eleição
+  municipal × partido. A variável-chave `partido_do_presidente` vale 1 para
+  o partido do presidente eleito em *t*. Os resultados são o % no 1º turno
+  para prefeito e se o partido elegeu o prefeito.
+- **Por quê:** com uma linha por partido, cada partido é comparado com ele
+  mesmo (onde tem prefeito × onde não tem; quando está na Presidência ×
+  quando não está), como pede a D15.
+- **Código:** `src/07_montar_painel.py`.
+
+### D27. Ponto de partida: a eleição anterior do mesmo cargo
+- Cada painel traz o % do mesmo partido na eleição **anterior do mesmo
+  cargo** (presidente em *t − 2* no painel A; prefeito em *t − 2* no painel
+  B), com o partido levado ao ano de comparação pelas fusões.
+- **Por quê:** permite comparar a variação, e não só o nível. Um partido
+  forte num município tende a ser forte nos dois cargos, e o ponto de
+  partida ajuda a separar isso da relação entre os cargos.
+- **Regra dos vazios:** fica 0% se o partido disputou a eleição anterior mas
+  não teve votos no município (ou não teve candidato a prefeito ali). Fica
+  vazio se o partido não disputou a Presidência em *t − 2*, se não há dados
+  (prefeito em 1992) ou se o município ainda não existia.
+
+### D28. Partidos sem candidato no painel B
+- No painel B entram os partidos que tiveram candidato a prefeito no
+  município em *t + 2* **ou** na eleição municipal anterior. Quem não teve
+  candidato fica com 0% e `teve_candidato` = 0.
+- **Por quê:** não lançar candidato também é um resultado (o partido pode
+  ter recuado ou apoiado outro). A análise pode usar todas as linhas ou só
+  as com candidato. Essa escolha fica para a análise.
+- **Limitação:** em 1996 não há eleição anterior nos dados (1992), então só
+  entram os partidos com candidato em 1996.
+
+### Observações para a análise (não são decisões)
+- **Presidente "eleito em t" × presidente no cargo em t + 2:** em dois
+  casos eles não coincidem. Em 2016, Dilma (PT) já tinha sido afastada, e
+  Temer (MDB) governava durante a eleição municipal. Em 2020, Bolsonaro já
+  tinha saído do PSL (nov/2019) e estava sem partido. O painel segue a D16
+  (partido do presidente eleito em *t*). Vale discutir com o orientador se
+  esses dois ciclos devem ser tratados de outra forma.
+- **Comparação descritiva inicial:** a saída do script 07 mostra, para cada
+  candidato a presidente, o % médio onde o prefeito é do seu partido × nos
+  demais municípios. É só uma média, sem controles, e não indica causa.
+
+---
+
 ## Observações sobre a qualidade dos dados (25/11/2026)
 - Totais por candidato conferidos com os resultados oficiais conhecidos de
   2002 a 2022: idênticos ao voto.
@@ -290,4 +341,5 @@ Decisões marcadas como **[provisória]** devem ser confirmadas com o orientador
 - 2026: os totais vêm do arquivo do TSE gerado em 25/11/2026; ainda não
   foram conferidos com a totalização oficial publicada.
 - Número de municípios cresce ao longo da série (5.019 em 1994; 5.571 em
-  2026), por causa da criação de municípios. Tratar no painel.
+  2026), por causa da criação de municípios. No painel, cada par usa os
+  municípios presentes nas duas eleições (perdem-se de 0 a 6 por par).

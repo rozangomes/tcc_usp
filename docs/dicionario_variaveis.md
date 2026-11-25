@@ -124,6 +124,45 @@ Uma linha por **ano × sigla** que aparece nos bancos de presidente e prefeito.
 | `linhagem_2026` | O partido equivalente hoje |
 | `origem` | Em quais bancos a sigla aparece naquele ano |
 
+## `data/processed/painel_prefeito_presidente` (.parquet / .csv)
+**Painel A, prefeito → presidente.** Uma linha por **município × par de
+eleições × candidato a presidente** (1º turno). Pares: 1996→1998, …,
+2024→2026 (D16, D26).
+
+| Coluna | Significado |
+|---|---|
+| `ano_prefeito`, `ano_presidente` | Ano do prefeito eleito (*t*) e da eleição para presidente (*t + 2*) |
+| `cd_municipio_tse`, `cd_municipio_ibge`, `nm_municipio`, `sg_uf`, `regiao`, `capital` | Município (como nas outras tabelas) |
+| `sg_partido_prefeito` | Sigla do partido do prefeito eleito em *t*, como no TSE |
+| `fonte_eleito` | `ordinária` ou `suplementar` (D21) |
+| `partido_prefeito` | Partido do prefeito levado a *t + 2* (linhagem com fusões; D23) |
+| `nr_candidato`, `candidato_presidente` | Número e nome de urna do candidato a presidente |
+| `sg_partido_presidente` | Sigla do candidato a presidente, como no TSE |
+| `partido_presidente` | Linhagem do candidato a presidente em *t + 2* |
+| `mesmo_partido` | 1 = o candidato é do partido do prefeito |
+| `partido_prefeito_tem_candidato` | 1 = o partido do prefeito teve candidato a presidente em *t + 2* |
+| `pct_votos_presidente` | % de votos válidos do candidato no município (1º turno) |
+| `pct_presidente_eleicao_anterior` | % do mesmo partido no 1º turno para presidente em *t − 2* (D27; vazio se o partido não disputou) |
+
+## `data/processed/painel_presidente_prefeito` (.parquet / .csv)
+**Painel B, presidente → prefeito.** Uma linha por **município × eleição
+municipal × partido**. Pares: 1994→1996, …, 2022→2024 (D16, D26). Entram
+os partidos com candidato a prefeito em *t + 2* ou na eleição municipal
+anterior (D28).
+
+| Coluna | Significado |
+|---|---|
+| `ano_presidente`, `ano_municipal` | Ano da eleição do presidente (*t*) e da eleição municipal (*t + 2*) |
+| `partido_presidente_eleito`, `presidente_eleito` | Partido (levado a *t + 2*) e nome do presidente eleito em *t* |
+| `cd_municipio_tse`, `cd_municipio_ibge`, `nm_municipio`, `sg_uf`, `regiao`, `capital` | Município |
+| `partido` | Linhagem do partido em *t + 2* |
+| `partido_do_presidente` | 1 = é o partido do presidente eleito em *t* |
+| `teve_candidato` | 1 = o partido teve candidato a prefeito no município em *t + 2* |
+| `n_candidatos_partido` | Número de candidatos do partido (normalmente 0 ou 1) |
+| `pct_prefeito_1t` | % de votos válidos do partido no 1º turno para prefeito (0 se não teve candidato) |
+| `elegeu_prefeito` | 1 = o partido elegeu o prefeito (regra da D21); vazio se não há eleito identificado |
+| `pct_prefeito_eleicao_anterior` | % do partido no 1º turno para prefeito em *t − 2*, com fusões aplicadas (D27; vazio em 1996) |
+
 ---
 
 Os arquivos .csv usam `;` como separador e `,` como decimal (padrão do Excel em português).

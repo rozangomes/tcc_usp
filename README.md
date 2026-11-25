@@ -27,6 +27,9 @@ python -m venv .venv
 
 # 6. Montar e conferir a equivalência de partidos
 .venv\Scripts\python src\06_tabela_partidos.py
+
+# 7. Montar os dois painéis (prefeito -> presidente e presidente -> prefeito)
+.venv\Scripts\python src\07_montar_painel.py
 ```
 
 Os dados brutos e processados **não** ficam no Git (são grandes); os scripts
@@ -43,6 +46,7 @@ equivalência de partidos) ficam no Git.
 | `src/04_baixar_prefeito.py` | Baixa do TSE os votos para prefeito por município e zona, 1996–2024 | `data/raw/prefeito/` |
 | `src/05_montar_prefeito_municipio.py` | Banco de votos de prefeito (eleição ordinária) e prefeito eleito por município e ano | `data/processed/prefeito_municipio*.{parquet,csv}` |
 | `src/06_tabela_partidos.py` | Confere as tabelas manuais de partidos contra os dados e gera a equivalência por ano (renomeações e fusões) | `data/processed/partidos_equivalencia.{parquet,csv}` |
+| `src/07_montar_painel.py` | Junta presidente e prefeito nos dois painéis do pareamento t → t+2, por partido | `data/processed/painel_*.{parquet,csv}` |
 | `src/partidos.py` | Funções de linhagem e sucessão de partidos (usadas pelo 06 e pelo painel) | — |
 | `src/utils_tse.py` | Funções compartilhadas (leitura parcial dos ZIPs do TSE, filtro por cargo, registro de downloads) | — |
 
